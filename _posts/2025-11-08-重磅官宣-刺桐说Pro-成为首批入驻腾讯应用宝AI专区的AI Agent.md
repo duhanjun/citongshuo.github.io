@@ -14,14 +14,19 @@ tags:
 ---
 
 我们的投资框架已接入AI大模型
+{: .text-center}
 
 点击 『刺桐说Pro』 分析牛股
+{: .text-center}
 
 量化交易实战入门课程已更新完结
+{: .text-center}
 
 点击 『课程目录』 一起从0到1学习
+{: .text-center}
 
 ————————— START —————————
+{: .text-center}
 
 ## 一、刺桐说Pro入驻应用宝
 
@@ -62,13 +67,17 @@ tags:
 ![Image](/img/2025-11-08-重磅官宣-刺桐说Pro-成为首批入驻腾讯应用宝AI专区的AI Agent-7.png)
 
 欢迎扫码体验刺桐说Pro
+{: .text-center}
 
 ![Image](/img/2025-11-08-重磅官宣-刺桐说Pro-成为首批入驻腾讯应用宝AI专区的AI Agent-8.jpeg)
 
 免责声明：本文仅为市场分析，基于公开信息整理，不构成任何投资建议。作者未持有证券投资咨询资格，相关内容仅供参考。投资有风险，入市需谨慎。
+{: .text-center}
 
 ————————— END —————————
+{: .text-center}
 
 ![Image](/img/2025-11-08-重磅官宣-刺桐说Pro-成为首批入驻腾讯应用宝AI专区的AI Agent-9.png)
 
 点击阅读原文进刺桐说会员群与嘉宾一起交流
+{: .text-center}
