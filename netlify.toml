@@ -1,10 +1,10 @@
 [build]
-  command = "bundle exec jekyll build"
+  command = "bundle install && bundle exec jekyll build"
   publish = "_site"
 
 [build.environment]
   JEKYLL_ENV = "production"
-  RUBY_VERSION = "3.3"
+  RUBY_VERSION = "3.4"
 
 [[headers]]
   for = "/*"
@@ -12,6 +12,12 @@
     X-Content-Type-Options = "nosniff"
     X-Frame-Options = "DENY"
     X-XSS-Protection = "1; mode=block"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "no-cache"
 
 [[headers]]
   for = "/assets/*"
@@ -22,3 +28,8 @@
   for = "/img/*"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
+
+[[redirects]]
+  from = "/*"
+  to = "/404.html"
+  status = 404
