@@ -3,6 +3,9 @@
  * Deploy static directory to ESA (Assets mode)
  * Usage: node scripts/deploy-folder.mjs <name> <folder-path> [description]
  */
+import { bootstrap } from "global-agent";
+if (process.env.HTTPS_PROXY || process.env.https_proxy) bootstrap();
+
 import Esa20240910 from "@alicloud/esa20240910";
 import OpenApi from "@alicloud/openapi-client";
 import TeaUtil from "@alicloud/tea-util";
