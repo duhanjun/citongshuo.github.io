@@ -3,6 +3,9 @@
  * Manage ESA Edge Routines
  * Usage: node scripts/manage.mjs <command> [options]
  */
+import { bootstrap } from "global-agent";
+if (process.env.HTTPS_PROXY || process.env.https_proxy) bootstrap();
+
 import Esa20240910 from "@alicloud/esa20240910";
 import OpenApi from "@alicloud/openapi-client";
 import Credential from "@alicloud/credentials";
@@ -13,6 +16,8 @@ function createClient() {
     credential,
     endpoint: "esa.cn-hangzhou.aliyuncs.com",
     userAgent: "AlibabaCloud-Agent-Skills/alibabacloud-esa-pages-deploy",
+    readTimeout: 60000,
+    connectTimeout: 30000,
   });
   return new Esa20240910.default(config);
 }
