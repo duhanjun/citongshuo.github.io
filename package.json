@@ -2,7 +2,6 @@
   "name": "citongshuo",
   "version": "1.0.0",
   "description": "刺桐说 - 专业投资者共创社群",
-  "type": "module",
   "scripts": {
     "deploy:esa": "node scripts/deploy-folder.mjs citongshuo ./_site"
   },
