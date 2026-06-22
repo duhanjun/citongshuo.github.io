@@ -1,0 +1,105 @@
+# Site settings
+encoding: utf-8
+title: 刺桐说
+SEOTitle: 刺桐说 - 专业投资者共创社群
+#header-img: img/home-bg.jpg
+header-bg-css: #060608
+#header-mask: 0.3
+email: touziweilai@qq.com
+description: "刺桐说是一个专业、开放、务实的投资者社群，社群成员来自券商、基金、期货、银行等金融机构。我们在知识星球一起交流市场观点、分享交易复盘、共享投研资源、开放实盘组合、共创投研小组。我们相信一群人聚在一起，可以创造超越个体的价值。欢迎志同道合的投资者加入，一起学习成长！"
+keyword: "刺桐说, 刺桐说社群, 二哥聊指数, 金融, 投资, 理财, 交易, 股票, 基金, ETF, 博客, 网站, "
+url: "https://www.citongshuo.shop/" # your host, for absolute URL
+baseurl: "" # for example, '/blog' if your blog hosted on 'host/blog'
+
+# Publish posts or collection documents with a future date.
+future: true
+
+# SNS settings
+RSS: false
+#weibo_username: xxx
+#zhihu_username: xxx
+#github_username: xxx
+#twitter_username: xxx
+#facebook_username:  xxx
+#linkedin_username:  firstname-lastname-idxxxx
+
+# Build settings
+# from 2016, 'pygments' is unsupported on GitHub Pages. Use 'rouge' for highlighting instead.
+highlighter: rouge
+permalink: pretty
+paginate: 10
+exclude:
+  [
+    "less",
+    "node_modules",
+    "Gruntfile.js",
+    "package.json",
+    "README.md",
+    "README.zh.md",
+  ]
+anchorjs: true # if you want to customize anchor. check out line:181 of `post.html`
+# If you have timezone issue (e.g. #68) in China, uncomment to use this:
+#timezone: CN
+
+# Gems
+# from PR#40, to support local preview for Jekyll 3.0
+# make sure you have this gem installed
+# `$ gem install jekyll-paginate`
+plugins: [jekyll-paginate]
+
+# Markdown settings
+# replace redcarpet to kramdown,
+# although redcarpet can auto highlight code, the lack of header-id make the catalog impossible, so I switch to kramdown
+# document: http://jekyllrb.com/docs/configuration/#kramdown
+markdown: kramdown
+kramdown:
+  input: GFM # use Github Flavored Markdown !important
+  syntax_highlighter_opts:
+    span:
+      line_numbers: false
+    block:
+      line_numbers: true
+      start_line: 1
+
+# Disqus settings
+#disqus_username: xxx
+
+# Netease settings
+netease_comment: false
+
+# Analytics settings
+# Baidu Analytics
+#ba_track_id: 560bf6cffc398b069232e8f4a9e542ae
+ba_track_id: 4d07ea19b8125b94a1f23e6abb7513a0
+
+# Google Analytics
+# ga_track_id: "UA-49627206-1" # Format: UA-xxxxxx-xx
+# ga_domain: huangxuan.me
+
+# Sidebar settings
+sidebar: true # whether or not using Sidebar.
+sidebar-about-description: "刺桐说是一个专业、开放、务实的投资者社群，1000+成员来自券商、基金、期货、银行等机构。 <br> <br> 我们相信一群人聚在一起，可以创造超越个体的价值。"
+#sidebar-avatar: img/home-bg-logo.png # use absolute URL, seeing it's used in both `/` and `/about/`
+
+# Featured Tags
+featured-tags: true # whether or not using Feature-Tags
+featured-condition-size: 1 # A tag will be featured if the size of it is more than this condition value
+
+# Progressive Web Apps
+chrome-tab-theme-color: "#000000"
+service-worker: true
+
+# MathJax rendering for layout:page (e.g. post preview)
+page-mathjax: false
+
+# Friends
+friends:
+  [
+    { title: "Wind", href: "https://www.wind.com.cn/" },
+    { title: "Choice", href: "https://choice.eastmoney.com/" },
+    { title: "通达信", href: "https://www.tdx.com.cn/" },
+    { title: "PTrade", href: "http://121.41.137.161:9091/hub/help/api#API文档" },
+    { title: "QMT", href: "http://docs.thinktrader.net/vip/QMT/#QMT" },
+    { title: "掘金量化", href: "https://www.myquant.cn/docs/guide/35" },
+    { title: "华泰证券", href: "https://www.htsc.com.cn/" },
+  ]
