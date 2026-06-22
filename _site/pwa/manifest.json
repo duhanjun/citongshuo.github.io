@@ -1,0 +1,19 @@
+{
+  "name": "刺桐说",
+  "short_name": "刺桐说",
+  "description": "刺桐说是一个专业、开放、务实的投资者社群，社群成员来自券商、基金、期货、银行等金融机构。我们在知识星球一起交流市场观点、分享交易复盘、共享投研资源、开放实盘组合、共创投研小组。我们相信一群人聚在一起，可以创造超越个体的价值。欢迎志同道合的投资者加入，一起学习成长！",
+  "icons": [{
+    "src": "icons/128.png",
+    "sizes": "128x128",
+    "type": "image/png"
+  }, {
+    "src": "icons/512.png",
+    "sizes": "512x512",
+    "type": "image/png"
+  }],
+  "background_color": "#fff",
+  "theme_color": "#000",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait"
+}

@@ -1,0 +1,9 @@
+{
+  "name": "citongshuo",
+  "installCommand": "",
+  "buildCommand": "",
+  "assets": {
+    "directory": "./_site",
+    "notFoundStrategy": "404Page"
+  }
+}
