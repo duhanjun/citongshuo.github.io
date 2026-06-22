@@ -1,10 +1,10 @@
 {
-  "name": "workspace",
+  "name": "citongshuo",
   "version": "1.0.0",
-  "description": "",
-  "main": "sw.js",
+  "description": "刺桐说 - 专业投资者共创社群",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "deploy:esa": "node scripts/deploy-folder.mjs citongshuo ./_site"
   },
   "repository": {
     "type": "git",
@@ -13,7 +13,6 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
   "bugs": {
     "url": "https://github.com/duhanjun/citongshuo.github.io/issues"
   },
@@ -23,7 +22,6 @@
     "@alicloud/esa20240910": "^2.43.0",
     "@alicloud/openapi-client": "^0.4.15",
     "@alicloud/tea-util": "^1.4.9",
-    "global-agent": "^4.1.3",
     "jszip": "^3.10.1"
   }
 }
