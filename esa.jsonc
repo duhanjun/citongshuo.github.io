@@ -1,0 +1,9 @@
+{
+  "name": "citongshuo",
+  "installCommand": "bundle install",
+  "buildCommand": "bundle exec jekyll build",
+  "assets": {
+    "directory": "./_site",
+    "notFoundStrategy": "404Page"
+  }
+}
