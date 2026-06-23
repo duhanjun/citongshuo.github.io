@@ -1,6 +1,7 @@
 .sass-cache
 .jekyll-cache
 .jekyll-metadata
+.bundle
 vendor
 
 _posts/_draft
