@@ -20,9 +20,7 @@ const PRECACHE_LIST = [
   "./js/hux-blog.min.js",
   "./js/snackbar.js",
   "./img/icon_wechat.png",
-  "./img/avatar-hux.jpg",
   "./img/home-bg.jpg",
-  "./img/404-bg.jpg",
   "./css/hux-blog.min.css",
   "./css/bootstrap.min.css"
   // "//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css",
@@ -30,10 +28,7 @@ const PRECACHE_LIST = [
   // "//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js"
 ]
 const HOSTNAME_WHITELIST = [
-  self.location.hostname,
-  "huangxuan.me",
-  "yanshuo.io",
-  "cdnjs.cloudflare.com"
+  self.location.hostname
 ]
 const DEPRECATED_CACHES = ['precache-v1', 'runtime', 'main-precache-v1', 'main-runtime']
 
@@ -197,7 +192,7 @@ self.addEventListener('fetch', event => {
     event.respondWith(
       Promise.race([fetched.catch(_ => cached), cached])
         .then(resp => resp || fetched)
-        .catch(_ => caches.match('offline.html'))
+        .catch(_ => caches.match('./offline.html'))
     );
 
     // Update the cache with the version we fetched (only for ok status)
