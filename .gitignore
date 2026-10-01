@@ -12,10 +12,8 @@ node_modules
 .vscode
 *.log
 *.lock
+!Gemfile.lock
 *.sh
 .DS_Store
 */.DS_Store
 */*/.DS_Store
-
-.vercel
-.wrangler
