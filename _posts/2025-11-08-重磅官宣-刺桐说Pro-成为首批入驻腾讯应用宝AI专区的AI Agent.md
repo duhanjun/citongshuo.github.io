@@ -4,6 +4,7 @@ title: "重磅官宣！「刺桐说Pro」成为首批入驻腾讯应用宝AI专�
 subtitle: "刺桐说Pro入驻应用宝"
 author: "二哥聊指数"
 date: 2025-11-08 09:00:00
+slug: "zhong-bang-guan-xuan-ci-tong-shuo-pro-cheng-wei-shou-pi-ru-zhu-teng-xun-ying-yong-bao-ai-zhuan-qu-de-aiagent"
 header-bg-css: "#060608"
 header-mask: 0.3
 mathjax: false

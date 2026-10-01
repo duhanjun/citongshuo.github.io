@@ -8,7 +8,7 @@ header-bg-css: #060608
 email: touziweilai@qq.com
 description: "刺桐说是一个专业、开放、务实的投资者社群，社群成员来自券商、基金、期货、银行等金融机构。我们在知识星球一起交流市场观点、分享交易复盘、共享投研资源、开放实盘组合、共创投研小组。我们相信一群人聚在一起，可以创造超越个体的价值。欢迎志同道合的投资者加入，一起学习成长！"
 keyword: "刺桐说, 刺桐说社群, 二哥聊指数, 金融, 投资, 理财, 交易, 股票, 基金, ETF, 博客, 网站, "
-url: "https://www.citongshuo.shop/" # your host, for absolute URL
+url: "https://www.citongshuo.online" # your host, for absolute URL（末尾不加斜杠，模板中有 site.url 与 page.url 直接拼接处）
 baseurl: "" # for example, '/blog' if your blog hosted on 'host/blog'
 
 # Publish posts or collection documents with a future date.
@@ -36,6 +36,13 @@ exclude:
     "package.json",
     "README.md",
     "README.zh.md",
+    "scripts",
+    "esa.jsonc",
+    "netlify.toml",
+    "vercel.json",
+    "mise.toml",
+    "package-lock.json",
+    "历史文章.zip",
   ]
 anchorjs: true # if you want to customize anchor. check out line:181 of `post.html`
 # If you have timezone issue (e.g. #68) in China, uncomment to use this:
@@ -45,7 +52,7 @@ anchorjs: true # if you want to customize anchor. check out line:181 of `post.ht
 # from PR#40, to support local preview for Jekyll 3.0
 # make sure you have this gem installed
 # `$ gem install jekyll-paginate`
-plugins: [jekyll-paginate]
+plugins: [jekyll-paginate, jekyll-feed]
 
 # Markdown settings
 # replace redcarpet to kramdown,
