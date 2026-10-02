@@ -5,7 +5,7 @@
  * 一次转换做四件事：
  *   1. 抓取草稿正文（微信返回的是带内联样式的 HTML）
  *   2. 转成 Markdown，剥掉所有样式，保留标题层级 / 加粗 / 列表 / 引用 / 图片
- *   3. 下载正文图片到 img/，按项目约定命名 <日期>-<标题>-N.<ext>
+ *   3. 下载正文图片到 img/，命名为 <slug>-N.<ext>（短且纯 ASCII，URL 干净）
  *   4. 生成 _posts/<日期>-<标题>.md，front matter 与现有文章保持一致
  *
  * 凭据走环境变量（不要写进仓库）：
@@ -568,12 +568,18 @@ async function main() {
   }
 
   const fileBase = `${dayPart}-${sanitizeForFilename(title)}`;
+  // 图片按 slug 命名：短、纯 ASCII，URL 干净；文件本身仍沿用「日期-标题」的仓库惯例
+  const imageBase = sanitizeForFilename(slug) || fileBase;
+  if (/[^\x00-\x7F]/.test(imageBase)) {
+    console.log('提示：slug 含中文，图片 URL 也会含中文；建议用 --slug 指定短英文名。');
+    console.log('');
+  }
   if (images.length > 0) {
     fs.mkdirSync(IMG_DIR, { recursive: true });
   }
   for (let i = 0; i < images.length; i++) {
     const url = images[i];
-    const filename = `${fileBase}-${IMG_START_INDEX + i}${imageExt(url)}`;
+    const filename = `${imageBase}-${IMG_START_INDEX + i}${imageExt(url)}`;
     const dest = path.join(IMG_DIR, filename);
     try {
       await downloadImage(url, dest);
