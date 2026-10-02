@@ -80,7 +80,7 @@ ba_track_id: 4d07ea19b8125b94a1f23e6abb7513a0
 
 # Sidebar settings
 sidebar: true # whether or not using Sidebar.
-sidebar-about-description: "刺桐说是一个专业、严谨、务实的投资者社群，1000+成员来自券商、基金、期货、银行等机构。 <br> <br> 我们相信一群人聚在一起，可以创造超越个体的价值。"
+sidebar-about-description: "刺桐说是一个专业、严谨、务实的投资者社群，成员来自券商、基金、期货、银行等机构。我们相信一群人聚在一起，可以创造超越个体的价值。"
 #sidebar-avatar: img/home-bg-logo.png # use absolute URL, seeing it's used in both `/` and `/about/`
 
 # Featured Tags
