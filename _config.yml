@@ -6,7 +6,7 @@ SEOTitle: 刺桐说 - 专业投资者共创社群
 header-bg-css: #060608
 #header-mask: 0.3
 email: touziweilai@qq.com
-description: "刺桐说是一个专业、开放、务实的投资者社群，社群成员来自券商、基金、期货、银行等金融机构。我们在知识星球一起交流市场观点、分享交易复盘、共享投研资源、开放实盘组合、共创投研小组。我们相信一群人聚在一起，可以创造超越个体的价值。欢迎志同道合的投资者加入，一起学习成长！"
+description: "刺桐说是一个专业、严谨、务实的投资者社群，成员来自券商、基金、期货、银行等机构。我们相信一群人聚在一起，可以创造超越个体的价值。"
 keyword: "刺桐说, 刺桐说社群, 二哥聊指数, 金融, 投资, 理财, 交易, 股票, 基金, ETF, 博客, 网站, "
 url: "https://www.citongshuo.online" # your host, for absolute URL（末尾不加斜杠，模板中有 site.url 与 page.url 直接拼接处）
 baseurl: "" # for example, '/blog' if your blog hosted on 'host/blog'
@@ -80,7 +80,7 @@ ba_track_id: 4d07ea19b8125b94a1f23e6abb7513a0
 
 # Sidebar settings
 sidebar: true # whether or not using Sidebar.
-sidebar-about-description: "刺桐说是一个专业、开放、务实的投资者社群，1000+成员来自券商、基金、期货、银行等机构。 <br> <br> 我们相信一群人聚在一起，可以创造超越个体的价值。"
+sidebar-about-description: "刺桐说是一个专业、严谨、务实的投资者社群，1000+成员来自券商、基金、期货、银行等机构。 <br> <br> 我们相信一群人聚在一起，可以创造超越个体的价值。"
 #sidebar-avatar: img/home-bg-logo.png # use absolute URL, seeing it's used in both `/` and `/about/`
 
 # Featured Tags
