@@ -38,20 +38,4 @@ if(navigator.serviceWorker){
     .register('/sw.js')
     .then((registration) => handleRegistration(registration))
     .catch((error) => {console.log('ServiceWorker registration failed: ', error)})
-
-  // register message receiver
-  // https://dbwriteups.wordpress.com/2015/11/16/service-workers-part-3-communication-between-sw-and-pages/
-  navigator.serviceWorker.onmessage = (e) => {
-    console.log('SW: SW Broadcasting:', event);
-    const data = e.data
-    
-    if(data.command == "UPDATE_FOUND"){
-      console.log("UPDATE_FOUND_BY_SW", data);
-      createSnackbar({
-        message: "网页内容已更新",
-        actionText:"请点击刷新",
-        action: function(e){location.reload()}
-      })
-    }
-  }
 }
