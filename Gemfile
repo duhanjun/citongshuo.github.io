@@ -14,5 +14,6 @@ gem "rake"
 gem "http_parser.rb", "~> 0.6.0", :platforms => [:jruby]
 gem "jekyll-theme-clean-blog"
 gem "jekyll-paginate"
+gem "jekyll-redirect-from"
 gem "webrick", "~> 1.7"
 gem "ruby-pinyin", "~> 0.5.0"

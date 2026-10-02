@@ -1,12 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator><link href="https://www.citongshuo.online/feed.xml" rel="self" type="application/atom+xml" /><link href="https://www.citongshuo.online/" rel="alternate" type="text/html" /><updated>2026-10-02T14:54:34+08:00</updated><id>https://www.citongshuo.online/feed.xml</id><title type="html">刺桐说</title><subtitle>刺桐说是一个专业、严谨、务实的投资者社群，成员来自券商、基金、期货、银行等机构。我们相信一群人聚在一起，可以创造超越个体的价值。</subtitle><entry><title type="html">私募总监的AI实验：用WorkBuddy制作投资大咖的数字分身</title><link href="https://www.citongshuo.online/2026/10/02/si-mu-zong-jian-de-ai-shi-yan-yong-workbuddy-zhi-zuo-tou-zi-da-ka-de-shu-zi-fen-shen/" rel="alternate" type="text/html" title="私募总监的AI实验：用WorkBuddy制作投资大咖的数字分身" /><published>2026-10-02T17:00:00+08:00</published><updated>2026-10-02T17:00:00+08:00</updated><id>https://www.citongshuo.online/2026/10/02/si-mu-zong-jian-de-ai-shi-yan-yong-workbuddy-zhi-zuo-tou-zi-da-ka-de-shu-zi-fen-shen</id><content type="html" xml:base="https://www.citongshuo.online/2026/10/02/si-mu-zong-jian-de-ai-shi-yan-yong-workbuddy-zhi-zuo-tou-zi-da-ka-de-shu-zi-fen-shen/"><![CDATA[<p><img src="/img/2026-10-02-私募总监的AI实验：用WorkBuddy制作投资大咖的数字分身-2.gif" alt="Image" /></p>
-
-<p>能不能将投资群里的大佬们克隆成AI分身，7×24小时为你答疑？一位前私募总监真的做到了。本期将“揭秘”他是怎么把自己“刺桐说”社群的4位投资专家，变成了一支永不疲倦、不会情绪化、保持理性判断的AI投研团队。</p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator><link href="https://www.citongshuo.online/feed.xml" rel="self" type="application/atom+xml" /><link href="https://www.citongshuo.online/" rel="alternate" type="text/html" /><updated>2026-10-02T15:35:30+08:00</updated><id>https://www.citongshuo.online/feed.xml</id><title type="html">刺桐说</title><subtitle>刺桐说是一个专业、严谨、务实的投资者社群，成员来自券商、基金、期货、银行等机构。我们相信一群人聚在一起，可以创造超越个体的价值。</subtitle><entry><title type="html">私募总监的AI实验：用WorkBuddy制作投资大咖的数字分身</title><link href="https://www.citongshuo.online/2026/06/16/workbuddy-ai-expert-team/" rel="alternate" type="text/html" title="私募总监的AI实验：用WorkBuddy制作投资大咖的数字分身" /><published>2026-06-16T17:00:00+08:00</published><updated>2026-06-16T17:00:00+08:00</updated><id>https://www.citongshuo.online/2026/06/16/workbuddy-ai-expert-team</id><content type="html" xml:base="https://www.citongshuo.online/2026/06/16/workbuddy-ai-expert-team/"><![CDATA[<p>能不能将投资群里的大佬们克隆成AI分身，7×24小时为你答疑？一位前私募总监真的做到了。本期将“揭秘”他是怎么把自己“刺桐说”社群的4位投资专家，变成了一支永不疲倦、不会情绪化、保持理性判断的AI投研团队。</p>
 
 <p><img src="/img/2026-10-02-私募总监的AI实验：用WorkBuddy制作投资大咖的数字分身-3.jpeg" alt="Image" /></p>
 
 <p>杜汉军在WorkBuddy OPC超级派对现场分享</p>
 
-<p><strong>一个大胆的问题</strong></p>
+<h2 id="一个大胆的问题">一个大胆的问题</h2>
 
 <p>2026年6月5日，在WorkBuddy OPC超级派对的舞台上，WorkBuddy Nova大使、前私募机构投资总监、刺桐说社群主理人杜汉军，抛出了一个引人深思的问题：</p>
 
@@ -20,29 +18,21 @@
 
 <p>本文将基于杜汉军的现场分享，为你完整拆解这个名为“刺桐说Pro”的多智能体投研系统——从架构设计到提示词工程，从协作规则到踩过的坑，相信这些内容，也能给正在使用或创建WorkBuddy专家团的你，带来一些启发。</p>
 
-<p><strong>- 01 -</strong></p>
-
-<p><strong>社群运营的三重困境</strong></p>
+<h2 id="一社群运营的三重困境">一、社群运营的三重困境</h2>
 
 <p>刺桐说社群汇聚了众多投资领域的资深人士，但随着运营深入，团队发现了三个绕不开的瓶颈。</p>
 
-<p><strong>困境一：</strong></p>
-
-<p><strong>嘉宾精力有限，咨询需求无限</strong></p>
+<h3 id="困境一嘉宾精力有限咨询需求无限">困境一：嘉宾精力有限，咨询需求无限</h3>
 
 <p>“嘉宾一天在社群里最多能够回答3至5个深度问题。很多问题其实是重复的，可能今天嘉宾回复了A公司关于价值投资的分析逻辑，明天又用同一套价值投资的分析逻辑回答B公司，这对嘉宾来说是重复的回答。”</p>
 
 <p>嘉宾每次回答同类型的问题，整个分析思路都需要重新组织。<strong>嘉宾精力有限但成员咨询需求无限，是我们面临的第一个矛盾。</strong></p>
 
-<p><strong>困境二：</strong></p>
-
-<p><strong>响应不够及时，错失决策窗口</strong></p>
+<h3 id="困境二响应不够及时错失决策窗口">困境二：响应不够及时，错失决策窗口</h3>
 
 <p>“这不是靠更努力可以去解决的，这是一个时间稀缺性的物理约束。供给端无法弹性伸缩导致第二个矛盾点。”</p>
 
-<p><strong>困境三：</strong></p>
-
-<p><strong>讨论深度受限，无法跨领域碰撞</strong></p>
+<h3 id="困境三讨论深度受限无法跨领域碰撞">困境三：讨论深度受限，无法跨领域碰撞</h3>
 
 <p>“我们社群最大价值并不是单个嘉宾的回答，而是社群的嘉宾可以从不同角度去交叉验证同一个投资观点。”这种跨领域的投资观点碰撞，价值非常大。但问题是：<strong>“像这种跨领域的投资观点碰撞，在日常社群聊天或线上会议的互动中，其实比较难经常发生。”</strong></p>
 
@@ -50,9 +40,7 @@
 
 <p>把社群嘉宾的能力做成AI数字分身，让嘉宾可以7×24小时随叫随到，同台讨论。</p>
 
-<p><strong>- 02 -</strong></p>
-
-<p><strong>架构设计：构建多智能体投研团队</strong></p>
+<h2 id="二架构设计构建多智能体投研团队">二、架构设计：构建多智能体投研团队</h2>
 
 <p>确定完目标后，接下来就是选择用什么架构来做。</p>
 
@@ -68,17 +56,17 @@
 
 <p>所以，团队采用了 “1+N”架构</p>
 
-<p><strong>“1+N”架构</strong></p>
+<h3 id="1n架构">“1+N”架构</h3>
 
 <p><img src="/img/2026-10-02-私募总监的AI实验：用WorkBuddy制作投资大咖的数字分身-5.jpeg" alt="Image" /></p>
 
 <p>1+N 架构示意图</p>
 
-<p><strong>“</strong>1<strong>”</strong>是什么？—— 主理人（调度中枢）**</p>
+<h3 id="1是什么-主理人调度中枢">“1”是什么？—— 主理人（调度中枢）</h3>
 
 <p>首先是主理人，拥有18条智能路由规则，可以根据用户问题的意图，精准匹配合适回答的嘉宾。主理人只做调度跟引导，不替嘉宾作答。</p>
 
-<p><strong>“</strong>N<strong>”</strong>是什么？—— 4位AI专家分身**</p>
+<h3 id="n是什么-4位ai专家分身">“N”是什么？—— 4位AI专家分身</h3>
 
 <p>团队选择了社群中最具代表性的4位嘉宾，把他们的投资方法论和说话风格，训练成了4个AI分身：</p>
 
@@ -88,13 +76,13 @@
 
 <p>这个架构设计还有第二个关键设计：<strong>采用双模路由，设计了两套协作模式。</strong></p>
 
-<p><strong>双模路由系统</strong></p>
+<h3 id="双模路由系统">双模路由系统</h3>
 
 <p><img src="/img/2026-10-02-私募总监的AI实验：用WorkBuddy制作投资大咖的数字分身-7.jpeg" alt="Image" /></p>
 
 <p>工作流模式流程图</p>
 
-<p><strong>模式一：路由模式（简单问题）</strong></p>
+<h3 id="模式一路由模式简单问题">模式一：路由模式（简单问题）</h3>
 
 <p>适合目标明确、单一领域的问题。</p>
 
@@ -102,7 +90,7 @@
 
 <p><code class="language-plaintext highlighter-rouge">你提问 → 管家识别意图 → 直接匹配一位专家 → 专家独立作答 → 直接给你结果</code></p>
 
-<p><strong>模式二：工作流模式（复杂问题）</strong></p>
+<h3 id="模式二工作流模式复杂问题">模式二：工作流模式（复杂问题）</h3>
 
 <p>适合跨领域、需要多角度验证的复杂问题。</p>
 
@@ -112,37 +100,33 @@
 
 <p><strong>路由模式本身保证效率，工作流模式保证深度，两者相配合，基本上可以覆盖社群80%以上的投资问题。</strong></p>
 
-<p><strong>- 03 -</strong></p>
-
-<p><strong>灵魂注入：提示词工程的艺术</strong></p>
+<h2 id="三灵魂注入提示词工程的艺术">三、灵魂注入：提示词工程的艺术</h2>
 
 <p>如何让智能体看着不像刻板的投资顾问，而像跟嘉宾本人聊天一样？针对这个问题，团队做了四个层面的设计。</p>
 
-<p><strong>层面一：人格化话术</strong></p>
+<h3 id="层面一人格化话术">层面一：人格化话术</h3>
 
 <p>我们在嘉宾的提示词嵌入大量真人语料，不是泛泛地说“请以专业投资者的口吻去回答这个问题”，而是具体到口头禅和说话的方式，具体到嘉宾在某些问题上会怎么表达。</p>
 
 <p>“这些设定不是修饰，而是决定用户跟智能体对话的活人感。”</p>
 
-<p><strong>层面二：结构化的输出模板</strong></p>
+<h3 id="层面二结构化的输出模板">层面二：结构化的输出模板</h3>
 
 <p>它不是限制AI，而是锁定输出质量的底线。如果不加模板，AI可以写出一段看似像模像样的分析，但加了模板后，嘉宾每次输出的结构跟维度，还有判断逻辑，都会被规范在可评估的固定框架里面。</p>
 
-<p><strong>层面三：能力边界的标注</strong></p>
+<h3 id="层面三能力边界的标注">层面三：能力边界的标注</h3>
 
 <p>每位嘉宾都明确标注自己的能力范围，这可以防止智能体在自己不擅长的领域里面胡说八道。</p>
 
 <p>“在AI领域这个是叫幻觉管控，在我们这个系统里面是叫专业边界。”</p>
 
-<p><strong>层面四：禁止越界</strong></p>
+<h3 id="层面四禁止越界">层面四：禁止越界</h3>
 
 <p>绝不替嘉宾作答，不转述，不总结。这是系统的底线，一旦主理人开始对嘉宾的观点进行二次加工，系统的可信度就会崩溃，系统变得不可信。</p>
 
 <p><strong>这四个层面一起构成整个系统的提示词工程体系。</strong></p>
 
-<p><strong>- 04 -</strong></p>
-
-<p><strong>数据基石：Skill+NeoData</strong></p>
+<h2 id="四数据基石skillneodata">四、数据基石：Skill+NeoData</h2>
 
 <p>刺桐说Pro的数据来源，依托于WorkBuddy内置的NeoData金融数据服务。简单来说，就是一个可以用自然语言查询的金融数据库。</p>
 
@@ -150,7 +134,7 @@
 
 <p>NeoData数据底座示意图</p>
 
-<p><strong>NeoData金融数据服务能查什么？</strong></p>
+<h3 id="neodata金融数据服务能查什么">NeoData金融数据服务能查什么？</h3>
 
 <p><strong>股票</strong>：某家公司近10年的财报、估值指标、股东结构</p>
 
@@ -160,9 +144,7 @@
 
 <p><strong>行业</strong>：各行业ROE、营收增速、景气度</p>
 
-<p><strong>- 05 -</strong></p>
-
-<p><strong>协作铁律：保证稳定运行的规则</strong></p>
+<h2 id="五协作铁律保证稳定运行的规则">五、协作铁律：保证稳定运行的规则</h2>
 
 <p>让一个智能体独立工作很容易，只要说清楚你的要求，让智能体调用工具去执行就可以。但是，如果需要五、六个智能体协同工作，不制定规则的话，就会在协作层面出现较大的问题。</p>
 
@@ -170,9 +152,7 @@
 
 <p><img src="/img/2026-10-02-私募总监的AI实验：用WorkBuddy制作投资大咖的数字分身-9.jpeg" alt="Image" /></p>
 
-<p><strong>- 06 -</strong></p>
-
-<p><strong>踩过的坑与几点心得</strong></p>
+<h2 id="六踩过的坑与几点心得">六、踩过的坑与几点心得</h2>
 
 <p>分享环节尾声，杜汉军分享了他们在实践中踩过的坑和几点心得：</p>
 
@@ -188,25 +168,7 @@
 
 <p><strong>即可直接体验「刺桐说Pro」专家团</strong>👇**</p>
 
-<p><img src="/img/2026-10-02-私募总监的AI实验：用WorkBuddy制作投资大咖的数字分身-11.jpeg" alt="Image" /></p>
-
-<p>💡 读到这里，你是不是也跃跃欲试了？</p>
-
-<p>其实搭建一个属于自己的分身/专家团并不难。打开 WorkBuddy，在左侧导航栏找到「专家」入口，点击右上角的「我的专家」，就可以开始创建你的多智能体团队了~</p>
-
-<p><img src="/img/2026-10-02-私募总监的AI实验：用WorkBuddy制作投资大咖的数字分身-12.jpeg" alt="Image" /></p>
-
-<p><img src="/img/2026-10-02-私募总监的AI实验：用WorkBuddy制作投资大咖的数字分身-13.png" alt="Image" /></p>
-
-<p><strong>喜欢今天的内容就关注我们吧👇</strong></p>
-
-<p><strong>后续还有更多实用干货持续更新～</strong></p>
-
-<p><strong>欢迎前往官网下载体验</strong></p>
-
-<p><strong>亲自感受更多惊喜功能🎉</strong></p>
-
-<p>www.workbuddy.cn</p>]]></content><author><name>二哥聊指数</name></author><category term="游资策略" /><category term="短线交易" /><category term="价值投资" /><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">「刺桐说Pro」荣获“应用宝·宝器智造局”大赛最佳工具奖！</title><link href="https://www.citongshuo.online/2025/12/12/ci-tong-shuo-pro-rong-huo-ying-yong-bao-bao-qi-zhi-zao-ju-da-sai-zui-jia-gong-ju-jiang/" rel="alternate" type="text/html" title="「刺桐说Pro」荣获“应用宝·宝器智造局”大赛最佳工具奖！" /><published>2025-12-12T17:00:00+08:00</published><updated>2025-12-12T17:00:00+08:00</updated><id>https://www.citongshuo.online/2025/12/12/ci-tong-shuo-pro-rong-huo-ying-yong-bao-bao-qi-zhi-zao-ju-da-sai-zui-jia-gong-ju-jiang</id><content type="html" xml:base="https://www.citongshuo.online/2025/12/12/ci-tong-shuo-pro-rong-huo-ying-yong-bao-bao-qi-zhi-zao-ju-da-sai-zui-jia-gong-ju-jiang/"><![CDATA[<p class="text-center">我们的投资框架已接入AI智能体</p>
+<p><img src="/img/2026-10-02-私募总监的AI实验：用WorkBuddy制作投资大咖的数字分身-11.jpeg" alt="Image" /></p>]]></content><author><name>二哥聊指数</name></author><category term="游资策略" /><category term="短线交易" /><category term="价值投资" /><summary type="html"><![CDATA[能不能将投资群里的大佬们克隆成AI分身，7×24小时为你答疑？一位前私募总监真的做到了。本期将“揭秘”他是怎么把自己“刺桐说”社群的4位投资专家，变成了一支永不疲倦、不会情绪化、保持理性判断的AI投研团队。]]></summary></entry><entry><title type="html">「刺桐说Pro」荣获“应用宝·宝器智造局”大赛最佳工具奖！</title><link href="https://www.citongshuo.online/2025/12/12/citongshuo-pro-best-tool-award/" rel="alternate" type="text/html" title="「刺桐说Pro」荣获“应用宝·宝器智造局”大赛最佳工具奖！" /><published>2025-12-12T17:00:00+08:00</published><updated>2025-12-12T17:00:00+08:00</updated><id>https://www.citongshuo.online/2025/12/12/citongshuo-pro-best-tool-award</id><content type="html" xml:base="https://www.citongshuo.online/2025/12/12/citongshuo-pro-best-tool-award/"><![CDATA[<p class="text-center">我们的投资框架已接入AI智能体</p>
 
 <p class="text-center">点击『刺桐说Pro』分析自选股</p>
 
@@ -259,7 +221,7 @@
 
 <p><img src="/img/2025-12-12-刺桐说Pro-荣获“应用宝·宝器智造局”大赛最佳工具奖-15.png" alt="Image" /></p>
 
-<p class="text-center">免责声明：本文仅为市场分析，基于公开信息整理，不构成任何投资建议。作者未持有证券投资咨询资格，相关内容仅供参考。投资有风险，入市需谨慎。</p>]]></content><author><name>二哥聊指数</name></author><category term="游资策略" /><category term="短线交易" /><category term="价值投资" /><summary type="html"><![CDATA[我们的投资框架已接入AI智能体]]></summary></entry><entry><title type="html">重磅官宣！「刺桐说Pro」成为首批入驻腾讯应用宝AI专区的AI Agent</title><link href="https://www.citongshuo.online/2025/11/08/zhong-bang-guan-xuan-ci-tong-shuo-pro-cheng-wei-shou-pi-ru-zhu-teng-xun-ying-yong-bao-ai-zhuan-qu-de-aiagent/" rel="alternate" type="text/html" title="重磅官宣！「刺桐说Pro」成为首批入驻腾讯应用宝AI专区的AI Agent" /><published>2025-11-08T17:00:00+08:00</published><updated>2025-11-08T17:00:00+08:00</updated><id>https://www.citongshuo.online/2025/11/08/zhong-bang-guan-xuan-ci-tong-shuo-pro-cheng-wei-shou-pi-ru-zhu-teng-xun-ying-yong-bao-ai-zhuan-qu-de-aiagent</id><content type="html" xml:base="https://www.citongshuo.online/2025/11/08/zhong-bang-guan-xuan-ci-tong-shuo-pro-cheng-wei-shou-pi-ru-zhu-teng-xun-ying-yong-bao-ai-zhuan-qu-de-aiagent/"><![CDATA[<p class="text-center">我们的投资框架已接入AI大模型</p>
+<p class="text-center">免责声明：本文仅为市场分析，基于公开信息整理，不构成任何投资建议。作者未持有证券投资咨询资格，相关内容仅供参考。投资有风险，入市需谨慎。</p>]]></content><author><name>二哥聊指数</name></author><category term="游资策略" /><category term="短线交易" /><category term="价值投资" /><summary type="html"><![CDATA[我们的投资框架已接入AI智能体]]></summary></entry><entry><title type="html">重磅官宣！「刺桐说Pro」成为首批入驻腾讯应用宝AI专区的AI Agent</title><link href="https://www.citongshuo.online/2025/11/08/citongshuo-pro-tencent-ai-zone/" rel="alternate" type="text/html" title="重磅官宣！「刺桐说Pro」成为首批入驻腾讯应用宝AI专区的AI Agent" /><published>2025-11-08T17:00:00+08:00</published><updated>2025-11-08T17:00:00+08:00</updated><id>https://www.citongshuo.online/2025/11/08/citongshuo-pro-tencent-ai-zone</id><content type="html" xml:base="https://www.citongshuo.online/2025/11/08/citongshuo-pro-tencent-ai-zone/"><![CDATA[<p class="text-center">我们的投资框架已接入AI大模型</p>
 
 <p class="text-center">点击 『刺桐说Pro』 分析牛股</p>
 
@@ -311,7 +273,7 @@
 
 <p><img src="/img/2025-11-08-重磅官宣-刺桐说Pro-成为首批入驻腾讯应用宝AI专区的AI Agent-8.jpeg" alt="Image" /></p>
 
-<p class="text-center">免责声明：本文仅为市场分析，基于公开信息整理，不构成任何投资建议。作者未持有证券投资咨询资格，相关内容仅供参考。投资有风险，入市需谨慎。</p>]]></content><author><name>二哥聊指数</name></author><category term="游资策略" /><category term="短线交易" /><category term="价值投资" /><summary type="html"><![CDATA[我们的投资框架已接入AI大模型]]></summary></entry><entry><title type="html">科技股估值的上中下投资策略框架</title><link href="https://www.citongshuo.online/2025/08/25/ke-ji-gu-gu-zhi-de-shang-zhong-xia-tou-zi-ce-lue-kuang-jia/" rel="alternate" type="text/html" title="科技股估值的上中下投资策略框架" /><published>2025-08-25T17:00:00+08:00</published><updated>2025-08-25T17:00:00+08:00</updated><id>https://www.citongshuo.online/2025/08/25/ke-ji-gu-gu-zhi-de-shang-zhong-xia-tou-zi-ce-lue-kuang-jia</id><content type="html" xml:base="https://www.citongshuo.online/2025/08/25/ke-ji-gu-gu-zhi-de-shang-zhong-xia-tou-zi-ce-lue-kuang-jia/"><![CDATA[<p>本文内容整理自刺桐说会员群会议记录</p>
+<p class="text-center">免责声明：本文仅为市场分析，基于公开信息整理，不构成任何投资建议。作者未持有证券投资咨询资格，相关内容仅供参考。投资有风险，入市需谨慎。</p>]]></content><author><name>二哥聊指数</name></author><category term="游资策略" /><category term="短线交易" /><category term="价值投资" /><summary type="html"><![CDATA[我们的投资框架已接入AI大模型]]></summary></entry><entry><title type="html">科技股估值的上中下投资策略框架</title><link href="https://www.citongshuo.online/2025/08/25/tech-stock-valuation-framework/" rel="alternate" type="text/html" title="科技股估值的上中下投资策略框架" /><published>2025-08-25T17:00:00+08:00</published><updated>2025-08-25T17:00:00+08:00</updated><id>https://www.citongshuo.online/2025/08/25/tech-stock-valuation-framework</id><content type="html" xml:base="https://www.citongshuo.online/2025/08/25/tech-stock-valuation-framework/"><![CDATA[<p>本文内容整理自刺桐说会员群会议记录</p>
 
 <p>刺桐说 专题会议 No.191 张老师 2025-08-24</p>
 
@@ -397,7 +359,7 @@
 
 <p>点击订阅并加入刺桐说价值投资舰队群：</p>
 
-<p class="text-center">免责声明：本文仅为市场分析，基于公开信息整理，不构成任何投资建议。作者未持有证券投资咨询资格，相关内容仅供参考。投资有风险，入市需谨慎！</p>]]></content><author><name>二哥聊指数</name></author><category term="游资策略" /><category term="短线交易" /><category term="价值投资" /><summary type="html"><![CDATA[本文内容整理自刺桐说会员群会议记录]]></summary></entry><entry><title type="html">3家财务拐点公司背后的暴赚逻辑</title><link href="https://www.citongshuo.online/2025/03/23/3-jia-cai-wu-guai-dian-gong-si-bei-hou-de-bao-zhuan-luo-ji/" rel="alternate" type="text/html" title="3家财务拐点公司背后的暴赚逻辑" /><published>2025-03-23T17:00:00+08:00</published><updated>2025-03-23T17:00:00+08:00</updated><id>https://www.citongshuo.online/2025/03/23/3-jia-cai-wu-guai-dian-gong-si-bei-hou-de-bao-zhuan-luo-ji</id><content type="html" xml:base="https://www.citongshuo.online/2025/03/23/3-jia-cai-wu-guai-dian-gong-si-bei-hou-de-bao-zhuan-luo-ji/"><![CDATA[<p>本文内容整理自社群会员群嘉宾内部直播</p>
+<p class="text-center">免责声明：本文仅为市场分析，基于公开信息整理，不构成任何投资建议。作者未持有证券投资咨询资格，相关内容仅供参考。投资有风险，入市需谨慎！</p>]]></content><author><name>二哥聊指数</name></author><category term="游资策略" /><category term="短线交易" /><category term="价值投资" /><summary type="html"><![CDATA[本文内容整理自刺桐说会员群会议记录]]></summary></entry><entry><title type="html">3家财务拐点公司背后的暴赚逻辑</title><link href="https://www.citongshuo.online/2025/03/23/financial-inflection-stocks/" rel="alternate" type="text/html" title="3家财务拐点公司背后的暴赚逻辑" /><published>2025-03-23T17:00:00+08:00</published><updated>2025-03-23T17:00:00+08:00</updated><id>https://www.citongshuo.online/2025/03/23/financial-inflection-stocks</id><content type="html" xml:base="https://www.citongshuo.online/2025/03/23/financial-inflection-stocks/"><![CDATA[<p>本文内容整理自社群会员群嘉宾内部直播</p>
 
 <p>刺桐说社群 专题分享 No.191 张老师 20250323</p>
 
@@ -477,7 +439,7 @@
 <p><img src="/img/2025-03-23-3家财务拐点公司背后的暴赚逻辑-2.png" alt="Image" /></p>
 
 <p class="text-center">点击阅读原文订阅刺桐说会员与机构游资同行</p>
-<p><img src="/img/2025-03-23-3家财务拐点公司背后的暴赚逻辑-3.png" alt="Image" /></p>]]></content><author><name>二哥聊指数</name></author><category term="游资策略" /><category term="短线交易" /><category term="价值投资" /><summary type="html"><![CDATA[本文内容整理自社群会员群嘉宾内部直播]]></summary></entry><entry><title type="html">揭秘3倍收益AI全产业链布局复盘</title><link href="https://www.citongshuo.online/2025/03/22/jie-mi-3-bei-shou-yi-ai-quan-chan-ye-lian-bu-ju-fu-pan/" rel="alternate" type="text/html" title="揭秘3倍收益AI全产业链布局复盘" /><published>2025-03-22T17:00:00+08:00</published><updated>2025-03-22T17:00:00+08:00</updated><id>https://www.citongshuo.online/2025/03/22/jie-mi-3-bei-shou-yi-ai-quan-chan-ye-lian-bu-ju-fu-pan</id><content type="html" xml:base="https://www.citongshuo.online/2025/03/22/jie-mi-3-bei-shou-yi-ai-quan-chan-ye-lian-bu-ju-fu-pan/"><![CDATA[<p>本文内容整理自社群会员群嘉宾内部直播</p>
+<p><img src="/img/2025-03-23-3家财务拐点公司背后的暴赚逻辑-3.png" alt="Image" /></p>]]></content><author><name>二哥聊指数</name></author><category term="游资策略" /><category term="短线交易" /><category term="价值投资" /><summary type="html"><![CDATA[本文内容整理自社群会员群嘉宾内部直播]]></summary></entry><entry><title type="html">揭秘3倍收益AI全产业链布局复盘</title><link href="https://www.citongshuo.online/2025/03/22/ai-supply-chain-review/" rel="alternate" type="text/html" title="揭秘3倍收益AI全产业链布局复盘" /><published>2025-03-22T17:00:00+08:00</published><updated>2025-03-22T17:00:00+08:00</updated><id>https://www.citongshuo.online/2025/03/22/ai-supply-chain-review</id><content type="html" xml:base="https://www.citongshuo.online/2025/03/22/ai-supply-chain-review/"><![CDATA[<p>本文内容整理自社群会员群嘉宾内部直播</p>
 
 <p>刺桐说社群 专题分享 No.021 佳总 20250322</p>
 
@@ -535,7 +497,7 @@
 
 <p class="text-center">点击阅读原文订阅刺桐说会员与机构游资同行</p>
 <p><img src="/img/2025-03-22-揭秘3倍收益AI全产业链布局复盘-2.png" alt="Image" />
-<img src="/img/2025-03-22-揭秘3倍收益AI全产业链布局复盘-3.png" alt="Image" /></p>]]></content><author><name>二哥聊指数</name></author><category term="游资策略" /><category term="短线交易" /><category term="AI 投研" /><summary type="html"><![CDATA[本文内容整理自社群会员群嘉宾内部直播]]></summary></entry><entry><title type="html">价投突围：从K线奴隶到生态猎手</title><link href="https://www.citongshuo.online/2025/03/06/jia-tou-tu-wei-cong-k-xian-nu-li-dao-sheng-tai-lie-shou/" rel="alternate" type="text/html" title="价投突围：从K线奴隶到生态猎手" /><published>2025-03-06T17:00:00+08:00</published><updated>2025-03-06T17:00:00+08:00</updated><id>https://www.citongshuo.online/2025/03/06/jia-tou-tu-wei-cong-k-xian-nu-li-dao-sheng-tai-lie-shou</id><content type="html" xml:base="https://www.citongshuo.online/2025/03/06/jia-tou-tu-wei-cong-k-xian-nu-li-dao-sheng-tai-lie-shou/"><![CDATA[<h2 id="一当账户曲线成为集体镜鉴">一、当账户曲线成为集体镜鉴</h2>
+<img src="/img/2025-03-22-揭秘3倍收益AI全产业链布局复盘-3.png" alt="Image" /></p>]]></content><author><name>二哥聊指数</name></author><category term="游资策略" /><category term="短线交易" /><category term="AI 投研" /><summary type="html"><![CDATA[本文内容整理自社群会员群嘉宾内部直播]]></summary></entry><entry><title type="html">价投突围：从K线奴隶到生态猎手</title><link href="https://www.citongshuo.online/2025/03/06/value-investing-breakout/" rel="alternate" type="text/html" title="价投突围：从K线奴隶到生态猎手" /><published>2025-03-06T17:00:00+08:00</published><updated>2025-03-06T17:00:00+08:00</updated><id>https://www.citongshuo.online/2025/03/06/value-investing-breakout</id><content type="html" xml:base="https://www.citongshuo.online/2025/03/06/value-investing-breakout/"><![CDATA[<h2 id="一当账户曲线成为集体镜鉴">一、当账户曲线成为集体镜鉴</h2>
 
 <p>我们永远记得那个闷热的午后，彼时市场欢呼的”924疯牛”行情中，我们的账户竟逆势下跌15%。</p>
 
@@ -568,7 +530,7 @@
 <p>这种生态化思维，让我们在最近某储能龙头的解禁行情中提前两周布局，斩获35%的波段涨幅。</p>
 
 <p><img src="/img/2025-03-06-价投突围-从K线奴隶到生态猎手-2.png" alt="Image" />
-<img src="/img/2025-03-06-价投突围-从K线奴隶到生态猎手-3.jpeg" alt="Image" /></p>]]></content><author><name>二哥聊指数</name></author><category term="游资策略" /><category term="短线交易" /><category term="价值投资" /><summary type="html"><![CDATA[一、当账户曲线成为集体镜鉴]]></summary></entry><entry><title type="html">游资进化：从涨停幻想到认知升维</title><link href="https://www.citongshuo.online/2025/03/04/you-zi-jin-hua-cong-zhang-ting-huan-xiang-dao-ren-zhi-sheng-wei/" rel="alternate" type="text/html" title="游资进化：从涨停幻想到认知升维" /><published>2025-03-04T17:00:00+08:00</published><updated>2025-03-04T17:00:00+08:00</updated><id>https://www.citongshuo.online/2025/03/04/you-zi-jin-hua-cong-zhang-ting-huan-xiang-dao-ren-zhi-sheng-wei</id><content type="html" xml:base="https://www.citongshuo.online/2025/03/04/you-zi-jin-hua-cong-zhang-ting-huan-xiang-dao-ren-zhi-sheng-wei/"><![CDATA[<h2 id="一短线博弈之道模式固化与动态调整策略">一、短线博弈之道：模式固化与动态调整策略</h2>
+<img src="/img/2025-03-06-价投突围-从K线奴隶到生态猎手-3.jpeg" alt="Image" /></p>]]></content><author><name>二哥聊指数</name></author><category term="游资策略" /><category term="短线交易" /><category term="价值投资" /><summary type="html"><![CDATA[一、当账户曲线成为集体镜鉴]]></summary></entry><entry><title type="html">游资进化：从涨停幻想到认知升维</title><link href="https://www.citongshuo.online/2025/03/04/youzi-evolution/" rel="alternate" type="text/html" title="游资进化：从涨停幻想到认知升维" /><published>2025-03-04T17:00:00+08:00</published><updated>2025-03-04T17:00:00+08:00</updated><id>https://www.citongshuo.online/2025/03/04/youzi-evolution</id><content type="html" xml:base="https://www.citongshuo.online/2025/03/04/youzi-evolution/"><![CDATA[<h2 id="一短线博弈之道模式固化与动态调整策略">一、短线博弈之道：模式固化与动态调整策略</h2>
 
 <p>在社群投研小组的讨论中，我们普遍认为短线交易需建立明确的模式边界，例如聚焦“一进二”策略（首板后次日打板），通过复盘筛选主流题材内的标的，结合隔夜单和集合竞价判断次日方向。</p>
 

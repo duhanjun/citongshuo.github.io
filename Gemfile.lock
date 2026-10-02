@@ -42,6 +42,8 @@ GEM
     jekyll-feed (0.18.0)
       jekyll (>= 3.7, < 5.0)
     jekyll-paginate (1.1.0)
+    jekyll-redirect-from (0.17.0)
+      jekyll (>= 3.3, < 5.0)
     jekyll-sass-converter (3.1.0)
       sass-embedded (~> 1.75)
     jekyll-seo-tag (2.9.1)
@@ -100,6 +102,7 @@ DEPENDENCIES
   jekyll (~> 4.4.0)
   jekyll-feed (~> 0.12)
   jekyll-paginate
+  jekyll-redirect-from
   jekyll-theme-clean-blog
   minima (~> 2.5)
   rake
@@ -125,6 +128,7 @@ CHECKSUMS
   jekyll (4.4.1) sha256=4c1144d857a5b2b80d45b8cf5138289579a9f8136aadfa6dd684b31fe2bc18c1
   jekyll-feed (0.18.0) sha256=8e6829f455b8764a8fa1bbb198d0ebb3525128dacc6ffe9d15f4df7388bc3647
   jekyll-paginate (1.1.0) sha256=880aadf4b02529a93541d508c5cbb744f014cbfc071d0263a31f25ec9066eb64
+  jekyll-redirect-from (0.17.0) sha256=703dab0428b20bb5d550ab83d3c28b65bb5ecc0f734c5e61ee680de391b3e897
   jekyll-sass-converter (3.1.0) sha256=83925d84f1d134410c11d0c6643b0093e82e3a3cf127e90757a85294a3862443
   jekyll-seo-tag (2.9.1) sha256=ed5c757a091048b6ef9109f856f84a29beaeb70f531ba5775a5e92129a28093e
   jekyll-theme-clean-blog (4.0.12) sha256=d427122acb31b95188237d4681560e6d51ec4068ad8a49c489949471f3474627
