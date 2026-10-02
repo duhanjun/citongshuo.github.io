@@ -181,7 +181,12 @@ function tokenize(html) {
     if (!nameMatch) continue;
 
     const name = nameMatch[1].toLowerCase();
-    tokens.push({ type: closing ? 'close' : 'open', name, attrs: closing ? {} : parseAttrs(body) });
+    tokens.push({
+      type: closing ? 'close' : 'open',
+      name,
+      attrs: closing ? {} : parseAttrs(body),
+      selfClosing: /\/\s*$/.test(raw),
+    });
   }
   return tokens;
 }
@@ -197,6 +202,19 @@ function pickImageUrl(attrs) {
 }
 
 /**
+ * 没有闭合标签的元素，维护字号栈时要跳过
+ */
+const VOID_TAGS = new Set([
+  'br', 'hr', 'img', 'input', 'meta', 'link', 'col',
+  'source', 'area', 'base', 'wbr', 'embed', 'param', 'track',
+]);
+
+function readFontSize(attrs) {
+  const m = /font-size:\s*([0-9.]+)px/.exec((attrs && attrs.style) || '');
+  return m ? parseFloat(m[1]) : null;
+}
+
+/**
  * 把微信正文 HTML 转成 Markdown。
  * 图片先写成 __IMG_n__ 占位符，下载完成后再回填本地路径。
  */
@@ -208,6 +226,14 @@ function htmlToMarkdown(html) {
   let pendingPrefix = '';
   const inlineStack = [];
   const listStack = [];
+  // 微信用内联 font-size 表达标题层级而非 <h1>-<h6>，这里维护一条字号栈
+  const sizeStack = [];
+  const currentSize = () => {
+    for (let i = sizeStack.length - 1; i >= 0; i--) {
+      if (sizeStack[i]) return sizeStack[i];
+    }
+    return null;
+  };
 
   // 微信编辑器常产出 <strong><strong> 这类嵌套，会变成 ****文字****，需要收敛
   const cleanBlock = (text) => text
@@ -225,12 +251,13 @@ function htmlToMarkdown(html) {
       .replace(/ *\n */g, '\n')
       .replace(/\n{2,}/g, '\n')
       .trim());
+    const size = currentSize();
     buffer = '';
     if (!text) {
       pendingPrefix = '';
       return;
     }
-    blocks.push(pendingPrefix + text);
+    blocks.push({ text: pendingPrefix + text, size });
     pendingPrefix = '';
   };
 
@@ -243,15 +270,29 @@ function htmlToMarkdown(html) {
     }
 
     const { name } = token;
+    // 闭合标签要等业务逻辑用完当前字号再出栈，所以这里先算好是否参与字号栈
+    const trackSize = !VOID_TAGS.has(name) && !token.selfClosing;
 
     if (DROP_TAGS.has(name)) {
-      if (token.type === 'open') dropDepth++;
-      else dropDepth = Math.max(0, dropDepth - 1);
+      if (token.type === 'open') {
+        dropDepth++;
+        if (trackSize) sizeStack.push(readFontSize(token.attrs));
+      } else {
+        dropDepth = Math.max(0, dropDepth - 1);
+        if (trackSize) sizeStack.pop();
+      }
       continue;
     }
-    if (dropDepth > 0) continue;
+    if (dropDepth > 0) {
+      if (trackSize) {
+        if (token.type === 'open') sizeStack.push(null);
+        else sizeStack.pop();
+      }
+      continue;
+    }
 
     if (token.type === 'open') {
+      if (trackSize) sizeStack.push(readFontSize(token.attrs));
       if (name === 'br') { push('\n'); continue; }
       if (name === 'hr') { flush(); blocks.push('---'); continue; }
 
@@ -312,6 +353,7 @@ function htmlToMarkdown(html) {
     if (name === 'ul' || name === 'ol') {
       flush();
       listStack.pop();
+      if (trackSize) sizeStack.pop();
       continue;
     }
 
@@ -319,11 +361,13 @@ function htmlToMarkdown(html) {
         name === 'blockquote' || name === 'pre' || name === 'tr' ||
         name === 'figure' || name === 'figcaption') {
       flush();
+      if (trackSize) sizeStack.pop();
       continue;
     }
 
     if (/^h[1-6]$/.test(name)) {
       flush();
+      if (trackSize) sizeStack.pop();
       continue;
     }
 
@@ -335,10 +379,58 @@ function htmlToMarkdown(html) {
         break;
       }
     }
+    if (trackSize) sizeStack.pop();
   }
 
   flush();
-  return { markdown: blocks.join('\n\n'), images };
+
+  // 依字号推断标题层级：出现最多的字号视为正文，比正文大的字号按大小映射为 ##、### …
+  const freq = new Map();
+  for (const b of blocks) {
+    if (b.size) freq.set(b.size, (freq.get(b.size) || 0) + 1);
+  }
+  const bodySize = [...freq.entries()].sort((a, b) => b[1] - a[1])[0]?.[0] ?? null;
+  const headingSizes = [...new Set(blocks.map((b) => b.size))]
+    .filter((s) => s && s > bodySize)
+    .sort((a, b) => b - a);
+  // 层级超过 3 档说明这条规律不可靠，此时不做推断，全部按正文输出
+  const levelOf = headingSizes.length >= 1 && headingSizes.length <= 3
+    ? new Map(headingSizes.map((s, i) => [s, Math.min(i + 2, 6)]))
+    : new Map();
+
+  // 先给每段定级，便于后续合并
+  const parts = blocks.map((b) => {
+    const level = levelOf.get(b.size);
+    if (!level || b.text.startsWith('#')) return { text: b.text, level: 0 };
+    // 整段加粗、篇幅短、且不以句末标点收尾，才认定为标题而不是强调句
+    if (!/^\*\*[^*]+\*\*$/.test(b.text.trim())) return { text: b.text, level: 0 };
+    const plain = b.text.replace(/\*\*/g, '').trim();
+    if (plain.length > 40 || /[。！；，]$/.test(plain)) return { text: b.text, level: 0 };
+    return { text: plain, level };
+  });
+
+  // 微信常把「困境一：」和它的说明拆成两段，同级且以冒号结尾时合并为一条标题
+  const merged = [];
+  for (let i = 0; i < parts.length; i++) {
+    const cur = parts[i];
+    const next = parts[i + 1];
+    if (cur.level && next && next.level === cur.level && /[：:]$/.test(cur.text)) {
+      merged.push({ text: cur.text + next.text, level: cur.level });
+      i++;
+      continue;
+    }
+    merged.push(cur);
+  }
+
+  const markdown = merged
+    .map((p) => (p.level ? `${'#'.repeat(p.level)} ${p.text}` : p.text))
+    .join('\n\n');
+
+  return {
+    markdown,
+    images,
+    headingInfo: { bodySize, levels: [...levelOf.keys()] },
+  };
 }
 
 /* ------------------------------------------------------------------ 图片下载 */
@@ -462,7 +554,9 @@ async function main() {
   console.log(`media_id  ${mediaId}`);
   console.log('');
 
-  const { markdown, images } = htmlToMarkdown(news.content || '');
+  const { markdown, images, headingInfo } = htmlToMarkdown(news.content || '');
+  console.log(`字号推断  正文 ${headingInfo.bodySize ?? '未知'}，标题 ${headingInfo.levels.length ? headingInfo.levels.join('、') : '未识别（全部按正文输出）'}`);
+  console.log('');
 
   // 下载图片并回填本地路径
   let body = markdown;
