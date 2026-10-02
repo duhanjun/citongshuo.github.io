@@ -182,7 +182,32 @@ self.addEventListener('fetch', event => {
       return;
     }
 
-    // Stale-while-revalidate for possiblily dynamic content
+    // Network-first for HTML navigations.
+    // When the network is reachable we always serve the freshly fetched page, so a
+    // plain refresh shows the latest content. Cache and offline page are fallbacks.
+    if (isNavigationReq(event.request)) {
+      const cachedNav = caches.match(event.request);
+      const fetchedNav = fetch(getCacheBustingUrl(event.request), { cache: "no-store" });
+      const fetchedNavCopy = fetchedNav.then(resp => resp.clone());
+
+      event.respondWith(
+        fetchedNav
+          .catch(_ => cachedNav)
+          .then(resp => resp || cachedNav)
+          .then(resp => resp || caches.match('offline.html'))
+          .catch(_ => caches.match('offline.html'))
+      );
+
+      // keep the cached copy fresh for offline visits
+      event.waitUntil(
+        Promise.all([fetchedNavCopy, caches.open(CACHE)])
+          .then(([response, cache]) => response.ok && cache.put(event.request, response))
+          .catch(_ => {/* eat any errors */ })
+      );
+      return;
+    }
+
+    // Stale-while-revalidate for the remaining static resources
     // similar to HTTP's stale-while-revalidate: https://www.mnot.net/blog/2007/12/12/stale
     // Upgrade from Jake's to Surma's: https://gist.github.com/surma/eb441223daaedf880801ad80006389f1
     const cached = caches.match(event.request);
@@ -206,63 +231,7 @@ self.addEventListener('fetch', event => {
         .then(([response, cache]) => response.ok && cache.put(event.request, response))
         .catch(_ => {/* eat any errors */ })
     );
-
-    // If one request is a HTML naviagtion, checking update!
-    if (isNavigationReq(event.request)) {
-      // you need "preserve logs" to see this log
-      // cuz it happened before navigating
-      console.log(`fetch ${event.request.url}`)
-      event.waitUntil(revalidateContent(cached, fetchedCopy))
-    }
   }
 });
 
 
-/**
- * Broadcasting all clients with MessageChannel API
- */
-function sendMessageToAllClients(msg) {
-  self.clients.matchAll().then(clients => {
-    clients.forEach(client => {
-      console.log(client);
-      client.postMessage(msg)
-    })
-  })
-}
-
-/**
- * Broadcasting all clients async
- */
-function sendMessageToClientsAsync(msg) {
-  // waiting for new client alive with "async" setTimeout hacking
-  // https://twitter.com/Huxpro/status/799265578443751424
-  // https://jakearchibald.com/2016/service-worker-meeting-notes/#fetch-event-clients
-  setTimeout(() => {
-    sendMessageToAllClients(msg)
-  }, 1000)
-}
-
-/**
- * if content modified, we can notify clients to refresh
- * TODO: Gh-pages rebuild everything in each release. should find a workaround (e.g. ETag with cloudflare)
- * 
- * @param  {Promise<response>} cachedResp  [description]
- * @param  {Promise<response>} fetchedResp [description]
- * @return {Promise}
- */
-function revalidateContent(cachedResp, fetchedResp) {
-  // revalidate when both promise resolved
-  return Promise.all([cachedResp, fetchedResp])
-    .then(([cached, fetched]) => {
-      const cachedVer = cached.headers.get('last-modified')
-      const fetchedVer = fetched.headers.get('last-modified')
-      console.log(`"${cachedVer}" vs. "${fetchedVer}"`);
-      if (cachedVer !== fetchedVer) {
-        sendMessageToClientsAsync({
-          'command': 'UPDATE_FOUND',
-          'url': fetched.url
-        })
-      }
-    })
-    .catch(err => console.log(err))
-}
