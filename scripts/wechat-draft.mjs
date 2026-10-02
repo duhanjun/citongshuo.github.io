@@ -20,9 +20,10 @@
  * 选项：
  *   --date     "2026-10-02 09:00:00"  文章日期，默认今天 09:00:00
  *   --subtitle "副标题"               默认取草稿摘要
- *   --author   "二哥聊指数"           默认取草稿作者
+ *   --author   "二哥聊指数"           默认固定为「二哥聊指数」（草稿的 author 字段常是编辑器残留）
  *   --tags     "游资策略,短线交易"     默认用 DEFAULT_TAGS
- *   --slug     "自定义-slug"          默认取中文标题，构建时由 _plugins/pinyin-slug.rb 转拼音
+ *   --slug     "short-english-name"   强烈建议指定。缺省时取中文标题，构建时由 _plugins/pinyin-slug.rb
+ *                                     转成拼音，但图片名会跟着变中文、URL 变长
  *   --dry-run                         只打印转换结果，不下载图片、不写文件
  */
 
