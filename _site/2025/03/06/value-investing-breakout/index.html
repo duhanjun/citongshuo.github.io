@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 
 <head>
     <meta charset="utf-8">
@@ -255,6 +255,18 @@
         })
     </script>
     <!-- Search -->
+<style>
+  #pagefind-search {
+    height: 100%;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 80px;
+    --pagefind-ui-primary: #311e3e;
+    --pagefind-ui-text: #404040;
+    --pagefind-ui-background: #ffffff;
+    --pagefind-ui-border: #eeeeee;
+  }
+</style>
 <div class="search-page">
   <div class="search-icon-close-container">
     <span class="search-icon-close">
@@ -264,10 +276,13 @@
   <div class="search-main container">
     <div class="row">
       <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-        <form></form>
-        <input type="text" id="search-input" placeholder="输入关键词...">
-        </form>
-        <div id="search-results" class="mini-post-list"></div>
+        <!-- 全文搜索：由 Pagefind 挂载（无产物时前端会回退到下面的元数据搜索） -->
+        <div id="pagefind-search"></div>
+        <!-- 回退方案：simple-jekyll-search 元数据搜索 -->
+        <div id="legacy-search" hidden>
+          <input type="text" id="search-input" placeholder="输入关键词...">
+          <div id="search-results" class="mini-post-list"></div>
+        </div>
       </div>
     </div>
   </div>
@@ -314,7 +329,7 @@
                         <a class="tag" href="/archive/?tag=%E4%BB%B7%E5%80%BC%E6%8A%95%E8%B5%84" title="价值投资">价值投资</a>
                         
                     </div>
-                    <h1>价投突围：从K线奴隶到生态猎手</h1>
+                    <h1 data-pagefind-meta="title">价投突围：从K线奴隶到生态猎手</h1>
                     
                     <h2 class="subheading">当账户曲线成为集体镜鉴</h2>
                     <span class="meta">Posted by 二哥聊指数 on March 6, 2025</span>
@@ -344,7 +359,9 @@
                 <!-- Multi-Lingual -->
                 
 
-				<h2 id="一当账户曲线成为集体镜鉴">一、当账户曲线成为集体镜鉴</h2>
+				<!-- Pagefind 全文搜索只索引正文，不含上下篇导航/评论/页脚 -->
+				<div data-pagefind-body>
+					<h2 id="一当账户曲线成为集体镜鉴">一、当账户曲线成为集体镜鉴</h2>
 
 <p>我们永远记得那个闷热的午后，彼时市场欢呼的”924疯牛”行情中，我们的账户竟逆势下跌15%。</p>
 
@@ -379,6 +396,7 @@
 <p><img loading="lazy" decoding="async" src="/img/value-investing-breakout-2.png" alt="Image" />
 <img loading="lazy" decoding="async" src="/img/value-investing-breakout-3.jpeg" alt="Image" /></p>
 
+				</div>
 
                 <hr style="visibility: hidden;">
                 <ul class="pager">
@@ -591,9 +609,6 @@
 <!-- Custom Theme JavaScript -->
 <script src="/js/hux-blog.min.js "></script>
 
-<!-- Simple Jekyll Search -->
-<script src="/js/simple-jekyll-search.min.js"></script>
-
 <!-- Service Worker -->
 
 <script src="/js/snackbar.js "></script>
@@ -733,42 +748,83 @@
 <!-- Multi-Lingual -->
 
 
-<!-- Simple Jekyll Search -->
+<!-- Search：优先 Pagefind 全文搜索，产物缺失时回退到 simple-jekyll-search 元数据搜索 -->
 <script>
-    // https://stackoverflow.com/questions/1912501/unescape-html-entities-in-javascript
-    function htmlDecode(input) {
-        var e = document.createElement('textarea');
-        e.innerHTML = input;
-        // handle case of empty input
-        return e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue;
+    // 回退方案：只在没有 Pagefind 产物（如 GitHub Pages）时启用
+    function initLegacySearch() {
+        var pagefindBox = document.getElementById('pagefind-search');
+        if (pagefindBox) { pagefindBox.hidden = true; }
+        var legacyBox = document.getElementById('legacy-search');
+        if (legacyBox) { legacyBox.hidden = false; }
+
+        var script = document.createElement('script');
+        script.src = '/js/simple-jekyll-search.min.js';
+        script.onload = function () {
+            // https://stackoverflow.com/questions/1912501/unescape-html-entities-in-javascript
+            function htmlDecode(input) {
+                var e = document.createElement('textarea');
+                e.innerHTML = input;
+                // handle case of empty input
+                return e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue;
+            }
+
+            SimpleJekyllSearch({
+                searchInput: document.getElementById('search-input'),
+                resultsContainer: document.getElementById('search-results'),
+                json: '/search.json',
+                searchResultTemplate: '<div class="post-preview item"><a href="{url}"><h2 class="post-title">{title}</h2><h3 class="post-subtitle">{subtitle}</h3><hr></a></div>',
+                noResultsText: 'No results',
+                limit: 50,
+                fuzzy: false,
+                // a hack to get escaped subtitle unescaped. for some reason, 
+                // post.subtitle w/o escape filter nuke entire search.
+                templateMiddleware: function (prop, value, template) {
+                    if (prop === 'subtitle' || prop === 'title') {
+                        if (value.indexOf("code")) {
+                            return htmlDecode(value);
+                        } else {
+                            return value;
+                        }
+                    }
+                }
+            });
+        };
+        document.body.appendChild(script);
     }
 
-    SimpleJekyllSearch({
-        searchInput: document.getElementById('search-input'),
-        resultsContainer: document.getElementById('search-results'),
-        json: '/search.json',
-        searchResultTemplate: '<div class="post-preview item"><a href="{url}"><h2 class="post-title">{title}</h2><h3 class="post-subtitle">{subtitle}</h3><hr></a></div>',
-        noResultsText: 'No results',
-        limit: 50,
-        fuzzy: false,
-        // a hack to get escaped subtitle unescaped. for some reason, 
-        // post.subtitle w/o escape filter nuke entire search.
-        templateMiddleware: function (prop, value, template) {
-            if (prop === 'subtitle' || prop === 'title') {
-                if (value.indexOf("code")) {
-                    return htmlDecode(value);
-                } else {
-                    return value;
+    // 特性探测：Pagefind 产物存在则用全文搜索，否则加载失败回退
+    (function () {
+        var script = document.createElement('script');
+        script.src = '/pagefind/pagefind-ui.js';
+        script.onload = function () {
+            var link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.href = '/pagefind/pagefind-ui.css';
+            document.head.appendChild(link);
+
+            new PagefindUI({
+                element: '#pagefind-search',
+                showSubResults: true,
+                showImages: false,
+                translations: {
+                    placeholder: '输入关键词...',
+                    zero_results: '未找到与 [SEARCH_TERM] 相关的内容',
+                    one_result: '找到 [COUNT] 篇相关文章',
+                    many_results: '找到 [COUNT] 篇相关文章',
+                    searching: '搜索中...',
+                    load_more: '加载更多',
+                    clear_search: '清除'
                 }
-            }
-        }
-    });
+            });
+        };
+        script.onerror = initLegacySearch;
+        document.body.appendChild(script);
+    })();
 
     $(document).ready(function () {
         var $searchPage = $('.search-page');
         var $searchOpen = $('.search-icon');
         var $searchClose = $('.search-icon-close');
-        var $searchInput = $('#search-input');
         var $body = $('body');
 
         $searchOpen.on('click', function (e) {
@@ -785,7 +841,8 @@
                     $searchPage.removeClass('search-active');
                     $body.attr('class', prevClasses);  // from closure 
                 });
-                $searchInput.focus();
+                // Pagefind UI 的输入框是异步渲染的，打开时按可见性动态定位
+                $('#pagefind-search input, #legacy-search input').filter(':visible').first().focus();
             }
         });
     });
