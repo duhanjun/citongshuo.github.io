@@ -30,9 +30,6 @@
 <!-- Custom Theme JavaScript -->
 <script src="{{ "/js/hux-blog.min.js " | prepend: site.baseurl }}"></script>
 
-<!-- Simple Jekyll Search -->
-<script src="{{ "/js/simple-jekyll-search.min.js" | prepend: site.baseurl }}"></script>
-
 <!-- Service Worker -->
 {% if site.service-worker %}
 <script src="{{ "/js/snackbar.js " | prepend: site.baseurl }}"></script>
@@ -271,42 +268,83 @@
 </script>
 {% endif %}
 
-<!-- Simple Jekyll Search -->
+<!-- Search：优先 Pagefind 全文搜索，产物缺失时回退到 simple-jekyll-search 元数据搜索 -->
 <script>
-    // https://stackoverflow.com/questions/1912501/unescape-html-entities-in-javascript
-    function htmlDecode(input) {
-        var e = document.createElement('textarea');
-        e.innerHTML = input;
-        // handle case of empty input
-        return e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue;
+    // 回退方案：只在没有 Pagefind 产物（如 GitHub Pages）时启用
+    function initLegacySearch() {
+        var pagefindBox = document.getElementById('pagefind-search');
+        if (pagefindBox) { pagefindBox.hidden = true; }
+        var legacyBox = document.getElementById('legacy-search');
+        if (legacyBox) { legacyBox.hidden = false; }
+
+        var script = document.createElement('script');
+        script.src = '{{ "/js/simple-jekyll-search.min.js" | prepend: site.baseurl }}';
+        script.onload = function () {
+            // https://stackoverflow.com/questions/1912501/unescape-html-entities-in-javascript
+            function htmlDecode(input) {
+                var e = document.createElement('textarea');
+                e.innerHTML = input;
+                // handle case of empty input
+                return e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue;
+            }
+
+            SimpleJekyllSearch({
+                searchInput: document.getElementById('search-input'),
+                resultsContainer: document.getElementById('search-results'),
+                json: '/search.json',
+                searchResultTemplate: '<div class="post-preview item"><a href="{url}"><h2 class="post-title">{title}</h2><h3 class="post-subtitle">{subtitle}</h3><hr></a></div>',
+                noResultsText: 'No results',
+                limit: 50,
+                fuzzy: false,
+                // a hack to get escaped subtitle unescaped. for some reason, 
+                // post.subtitle w/o escape filter nuke entire search.
+                templateMiddleware: function (prop, value, template) {
+                    if (prop === 'subtitle' || prop === 'title') {
+                        if (value.indexOf("code")) {
+                            return htmlDecode(value);
+                        } else {
+                            return value;
+                        }
+                    }
+                }
+            });
+        };
+        document.body.appendChild(script);
     }
 
-    SimpleJekyllSearch({
-        searchInput: document.getElementById('search-input'),
-        resultsContainer: document.getElementById('search-results'),
-        json: '/search.json',
-        searchResultTemplate: '<div class="post-preview item"><a href="{url}"><h2 class="post-title">{title}</h2><h3 class="post-subtitle">{subtitle}</h3><hr></a></div>',
-        noResultsText: 'No results',
-        limit: 50,
-        fuzzy: false,
-        // a hack to get escaped subtitle unescaped. for some reason, 
-        // post.subtitle w/o escape filter nuke entire search.
-        templateMiddleware: function (prop, value, template) {
-            if (prop === 'subtitle' || prop === 'title') {
-                if (value.indexOf("code")) {
-                    return htmlDecode(value);
-                } else {
-                    return value;
+    // 特性探测：Pagefind 产物存在则用全文搜索，否则加载失败回退
+    (function () {
+        var script = document.createElement('script');
+        script.src = '{{ "/pagefind/pagefind-ui.js" | prepend: site.baseurl }}';
+        script.onload = function () {
+            var link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.href = '{{ "/pagefind/pagefind-ui.css" | prepend: site.baseurl }}';
+            document.head.appendChild(link);
+
+            new PagefindUI({
+                element: '#pagefind-search',
+                showSubResults: true,
+                showImages: false,
+                translations: {
+                    placeholder: '输入关键词...',
+                    zero_results: '未找到与 [SEARCH_TERM] 相关的内容',
+                    one_result: '找到 [COUNT] 篇相关文章',
+                    many_results: '找到 [COUNT] 篇相关文章',
+                    searching: '搜索中...',
+                    load_more: '加载更多',
+                    clear_search: '清除'
                 }
-            }
-        }
-    });
+            });
+        };
+        script.onerror = initLegacySearch;
+        document.body.appendChild(script);
+    })();
 
     $(document).ready(function () {
         var $searchPage = $('.search-page');
         var $searchOpen = $('.search-icon');
         var $searchClose = $('.search-icon-close');
-        var $searchInput = $('#search-input');
         var $body = $('body');
 
         $searchOpen.on('click', function (e) {
@@ -323,7 +361,8 @@
                     $searchPage.removeClass('search-active');
                     $body.attr('class', prevClasses);  // from closure 
                 });
-                $searchInput.focus();
+                // Pagefind UI 的输入框是异步渲染的，打开时按可见性动态定位
+                $('#pagefind-search input, #legacy-search input').filter(':visible').first().focus();
             }
         });
     });

@@ -21,7 +21,10 @@ layout: default
                     {% include multilingual-sel.html %}
                 {% endif %}
 
-				{{ content }}
+				<!-- Pagefind 全文搜索只索引正文，不含上下篇导航/评论/页脚 -->
+				<div data-pagefind-body>
+					{{ content }}
+				</div>
 
                 <hr style="visibility: hidden;">
                 <ul class="pager">

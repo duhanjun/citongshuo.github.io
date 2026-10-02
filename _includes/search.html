@@ -1,4 +1,16 @@
 <!-- Search -->
+<style>
+  #pagefind-search {
+    height: 100%;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 80px;
+    --pagefind-ui-primary: #311e3e;
+    --pagefind-ui-text: #404040;
+    --pagefind-ui-background: #ffffff;
+    --pagefind-ui-border: #eeeeee;
+  }
+</style>
 <div class="search-page">
   <div class="search-icon-close-container">
     <span class="search-icon-close">
@@ -8,10 +20,13 @@
   <div class="search-main container">
     <div class="row">
       <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-        <form></form>
-        <input type="text" id="search-input" placeholder="输入关键词...">
-        </form>
-        <div id="search-results" class="mini-post-list"></div>
+        <!-- 全文搜索：由 Pagefind 挂载（无产物时前端会回退到下面的元数据搜索） -->
+        <div id="pagefind-search"></div>
+        <!-- 回退方案：simple-jekyll-search 元数据搜索 -->
+        <div id="legacy-search" hidden>
+          <input type="text" id="search-input" placeholder="输入关键词...">
+          <div id="search-results" class="mini-post-list"></div>
+        </div>
       </div>
     </div>
   </div>
