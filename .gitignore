@@ -17,3 +17,6 @@ node_modules
 .DS_Store
 */.DS_Store
 */*/.DS_Store
+
+# 本地一键发布脚本（含 ESA 部署逻辑，仅本机使用，不纳入仓库）
+scripts/build-deploy.ps1
