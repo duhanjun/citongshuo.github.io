@@ -22,8 +22,8 @@
  *   --subtitle "副标题"               默认取草稿摘要
  *   --author   "二哥聊指数"           默认固定为「二哥聊指数」（草稿的 author 字段常是编辑器残留）
  *   --tags     "游资策略,短线交易"     默认用 DEFAULT_TAGS
- *   --slug     "short-english-name"   强烈建议指定。缺省时取中文标题，构建时由 _plugins/pinyin-slug.rb
- *                                     转成拼音，但图片名会跟着变中文、URL 变长
+ *   --slug     "short-english-name"   必填（--dry-run 除外）。只允许小写字母、数字与连字符。
+ *                                     用于生成文章 URL 与图片名，保证纯 ASCII 且双站一致
  *   --dry-run                         只打印转换结果，不下载图片、不写文件
  */
 
@@ -40,6 +40,12 @@ const DEFAULT_TAGS = ['游资策略', '短线交易', '价值投资'];
 
 // 正文图片从 -2 开始编号，把 -1 留给封面图，与现有文章命名一致
 const IMG_START_INDEX = 2;
+
+// slug 闸门：只允许小写字母、数字、连字符（仓库约定的短英文命名）
+const SLUG_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+
+// 单张图片体积上限，超出即提示压缩，避免仓库图片再次膨胀
+const MAX_IMAGE_BYTES = 300 * 1024;
 
 const API = 'https://api.weixin.qq.com/cgi-bin';
 
@@ -545,7 +551,19 @@ async function main() {
   // 草稿里的 author 字段常是编辑器残留（如「搭建数字分身的」），统一用项目惯例值
   const author = args.author || '二哥聊指数';
   const tags = args.tags ? String(args.tags).split(',').map((t) => t.trim()).filter(Boolean) : DEFAULT_TAGS;
-  const slug = args.slug || title;
+
+  // slug 闸门：缺失或格式不符一律拦下，保证 URL / 图片名为纯 ASCII 且双站一致
+  let slug = args.slug ? String(args.slug).trim() : '';
+  if (!slug) {
+    if (args['dry-run']) {
+      slug = title; // dry-run 不落盘，放宽校验
+    } else {
+      throw new Error('缺少 --slug。请用短英文名（小写字母+连字符），例如 --slug workbuddy-ai-expert-team；'
+        + '否则 URL 与图片名会含中文，且本机与 GitHub Pages 的 slug 不一致。');
+    }
+  } else if (!SLUG_RE.test(slug)) {
+    throw new Error(`--slug 不合法：「${slug}」。只允许小写字母、数字与连字符，例如 workbuddy-ai-expert-team。`);
+  }
 
   console.log(`标题      ${title}`);
   console.log(`副标题    ${subtitle}`);
@@ -570,26 +588,34 @@ async function main() {
 
   const fileBase = `${dayPart}-${sanitizeForFilename(title)}`;
   // 图片按 slug 命名：短、纯 ASCII，URL 干净；文件本身仍沿用「日期-标题」的仓库惯例
-  const imageBase = sanitizeForFilename(slug) || fileBase;
-  if (/[^\x00-\x7F]/.test(imageBase)) {
-    console.log('提示：slug 含中文，图片 URL 也会含中文；建议用 --slug 指定短英文名。');
-    console.log('');
-  }
+  const imageBase = slug;
   if (images.length > 0) {
     fs.mkdirSync(IMG_DIR, { recursive: true });
   }
+  const downloaded = [];
   for (let i = 0; i < images.length; i++) {
     const url = images[i];
     const filename = `${imageBase}-${IMG_START_INDEX + i}${imageExt(url)}`;
     const dest = path.join(IMG_DIR, filename);
     try {
       await downloadImage(url, dest);
+      const bytes = fs.statSync(dest).size;
+      if (bytes === 0) throw new Error('下载到空文件');
+      downloaded.push({ filename, bytes });
       body = body.replace(`__IMG_${i}__`, `/img/${filename}`);
-      console.log(`  图片 ${filename}`);
+      console.log(`  图片 ${filename}（${Math.round(bytes / 1024)}KB）`);
     } catch (err) {
       console.log(`  图片 ${filename} 下载失败（保留远程地址）：${err.message}`);
       body = body.replace(`__IMG_${i}__`, url);
     }
+  }
+
+  // 体积闸门：单图超限集中提示，避免大图再次入库
+  const oversize = downloaded.filter((d) => d.bytes > MAX_IMAGE_BYTES);
+  if (oversize.length > 0) {
+    console.log('');
+    console.log(`提醒：${oversize.length} 张图片超过 ${MAX_IMAGE_BYTES / 1024}KB，建议压缩后再提交：`);
+    for (const d of oversize) console.log(`  ${d.filename}  ${Math.round(d.bytes / 1024)}KB`);
   }
 
   const frontMatter = buildFrontMatter({ title, subtitle, author, date, slug, tags });

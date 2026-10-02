@@ -7,15 +7,43 @@
     <meta name="keywords" content="{{ site.keyword }}">
     <meta name="theme-color" content="{{ site.chrome-tab-theme-color }}">
 
-    <!-- Open Graph -->
-    <meta property="og:title"
-        content="{% if page.title %}{{ page.title }} - {{ site.SEOTitle }}{% else %}{{ site.SEOTitle }}{% endif %}">
+    <!-- Open Graph / Twitter Card -->
+    {% assign og_title = site.SEOTitle %}
+    {% if page.title %}{% assign og_title = page.title | append: ' - ' | append: site.SEOTitle %}{% endif %}
+    {% if page.layout == 'post' %}
+    {% assign og_desc = page.excerpt | strip_html | truncate: 200 %}
+    {% elsif page.description %}
+    {% assign og_desc = page.description %}
+    {% else %}
+    {% assign og_desc = site.description %}
+    {% endif %}
+    {% comment %} 分享图：默认用站点卡片；文章优先封面、其次正文首图 {% endcomment %}
+    {% assign og_image = '/img/og-default.jpg' | prepend: site.baseurl | prepend: site.url %}
+    {% if page.layout == 'post' %}
+    {% assign og_image_path = page.header-img %}
+    {% unless og_image_path %}
+    {% assign og_parts = content | split: 'src="' %}
+    {% for og_part in og_parts offset: 1 %}
+    {% assign og_cand = og_part | split: '"' | first %}
+    {% if og_cand contains '/img/' %}{% assign og_image_path = og_cand %}{% break %}{% endif %}
+    {% endfor %}
+    {% endunless %}
+    {% if og_image_path %}
+    {% assign og_image = og_image_path %}
+    {% unless og_image contains '://' %}
+    {% assign og_head = og_image | slice: 0 %}
+    {% unless og_head == '/' %}{% assign og_image = og_image | prepend: '/' %}{% endunless %}
+    {% assign og_image = og_image | prepend: site.baseurl | prepend: site.url %}
+    {% endunless %}
+    {% endif %}
+    {% endif %}
+    <meta property="og:title" content="{{ og_title }}">
     {% case page.layout %}
     {% when 'post' %}
     <meta property="og:type" content="article">
-    <meta property="og:description" content="{{ page.excerpt | strip_html | truncate:200 }}">
+    <meta property="og:description" content="{{ og_desc }}">
     {% if page.date %}
-    <meta property="article:published_time" content="{{ page.date | date: " %Y-%m-%dT%H:%M:%SZ" }}">
+    <meta property="article:published_time" content="{{ page.date | date: "%Y-%m-%dT%H:%M:%SZ" }}">
     {% endif %}
     {% if page.author %}
     <meta property="article:author" content="{{ page.author }}">
@@ -25,12 +53,49 @@
     {% endfor %}
     {% else %}
     <meta property="og:type" content="website">
-    <meta property="og:description"
-        content="{% if page.description %}{{ page.description }}{% else %}{{ site.description }}{% endif %}">
+    <meta property="og:description" content="{{ og_desc }}">
     {% endcase %}
-    <meta property="og:image" content="{{ site.url }}{{ site.sidebar-avatar }}">
+    <meta property="og:image" content="{{ og_image }}">
     <meta property="og:url" content="{{ site.url }}{{ page.url }}">
     <meta property="og:site_name" content="{{ site.SEOTitle }}">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ og_title }}">
+    <meta name="twitter:description" content="{{ og_desc }}">
+    <meta name="twitter:image" content="{{ og_image }}">
+
+    <!-- Structured Data (JSON-LD) -->
+    {% if page.layout == 'post' %}
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      "headline": {{ page.title | jsonify }},
+      "description": {{ og_desc | jsonify }},
+      "image": {{ og_image | jsonify }},
+      "keywords": {{ page.tags | join: ', ' | jsonify }},
+      "datePublished": {{ page.date | date_to_xmlschema | jsonify }},
+      "author": { "@type": "Person", "name": {{ page.author | default: site.title | jsonify }} },
+      "publisher": {
+        "@type": "Organization",
+        "name": {{ site.SEOTitle | jsonify }},
+        "logo": { "@type": "ImageObject", "url": {{ '/img/og-default.jpg' | prepend: site.baseurl | prepend: site.url | jsonify }} }
+      },
+      "mainEntityOfPage": { "@type": "WebPage", "@id": {{ page.url | prepend: site.url | jsonify }} }
+    }
+    </script>
+    {% else %}
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": {{ site.SEOTitle | jsonify }},
+      "url": {{ site.url | jsonify }},
+      "description": {{ og_desc | jsonify }}
+    }
+    </script>
+    {% endif %}
 
     <title>{% if page.title %}{{ page.title }} - {{ site.SEOTitle }}{% else %}{{ site.SEOTitle }}{% endif %}</title>
 

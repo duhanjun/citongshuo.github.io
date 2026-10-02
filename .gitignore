@@ -20,3 +20,6 @@ node_modules
 
 # 本地一键发布脚本（含 ESA 部署逻辑，仅本机使用，不纳入仓库）
 scripts/build-deploy.ps1
+
+# 历史归档压缩包（体积大，仅本地留存，不入库）
+历史文章.zip

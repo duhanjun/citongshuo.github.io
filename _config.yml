@@ -15,7 +15,8 @@ baseurl: "" # for example, '/blog' if your blog hosted on 'host/blog'
 future: true
 
 # SNS settings
-RSS: false
+# feed.xml 由 jekyll-feed 实际生成，开启后 sns-links 会显示订阅入口
+RSS: true
 #weibo_username: xxx
 #zhihu_username: xxx
 #github_username: xxx
