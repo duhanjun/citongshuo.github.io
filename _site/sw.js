@@ -20,9 +20,7 @@ const PRECACHE_LIST = [
   "./js/hux-blog.min.js",
   "./js/snackbar.js",
   "./img/icon_wechat.png",
-  "./img/avatar-hux.jpg",
   "./img/home-bg.jpg",
-  "./img/404-bg.jpg",
   "./css/hux-blog.min.css",
   "./css/bootstrap.min.css"
   // "//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css",
@@ -101,11 +99,11 @@ const getRedirectUrl = (req) => {
  */
 self.addEventListener('install', e => {
   e.waitUntil(
-    caches.open(CACHE).then(cache => {
-      return cache.addAll(PRECACHE_LIST)
-        .then(self.skipWaiting())
-        .catch(err => console.log(err))
-    })
+    caches.open(CACHE)
+      // addAll 是原子操作：清单里任一项拉取失败会整批回滚。但预缓存失败不该阻断
+      // SW 激活，所以这里只记录错误，skipWaiting() 无条件执行，其余资源仍由运行时按需缓存。
+      .then(cache => cache.addAll(PRECACHE_LIST).catch(err => console.log('precache failed:', err)))
+      .then(() => self.skipWaiting())
   )
 });
 
