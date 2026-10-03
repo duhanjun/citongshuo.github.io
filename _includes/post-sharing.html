@@ -1,17 +1,26 @@
 {% comment %}
     文章社交分享：微信 / 微博 / QQ / 系统分享 / 复制链接
-    微信分享需在微信内打开，站外只能复制链接后粘贴，故按钮仅复制并提示。
+    普通网页无法唤起微信转发（微信 JS-SDK 需认证公众号 + 服务端签名，静态站不可行），故：
+    - 触屏设备：优先调用系统分享面板（微信会出现在其中），否则退回复制链接；
+    - 桌面端：展开二维码，扫码到手机后再转发。
+    二维码在构建期生成（_plugins/qr_svg.rb），不依赖任何外部服务。
 {% endcomment %}
 
 {%- assign _ct_share_url = site.url | append: page.url -%}
 {%- assign _ct_share_title = page.title | default: site.title -%}
 <div class="ct-share" data-url="{{ _ct_share_url }}" data-title="{{ _ct_share_title | escape }}">
     <span class="ct-share-label">分享到</span>
-    <button type="button" data-ct-share="wechat">微信</button>
+    <button type="button" data-ct-share="wechat" aria-expanded="false">微信</button>
     <a href="https://service.weibo.com/share/share.php?url={{ _ct_share_url | url_encode }}&amp;title={{ _ct_share_title | url_encode }}"
         target="_blank" rel="noopener noreferrer">微博</a>
     <a href="https://connect.qq.com/widget/shareqq/index.html?url={{ _ct_share_url | url_encode }}&amp;title={{ _ct_share_title | url_encode }}"
         target="_blank" rel="noopener noreferrer">QQ</a>
     <button type="button" data-ct-share="native">更多</button>
     <button type="button" data-ct-share="copy">复制链接</button>
+    {%- if site.qr_svg_available -%}
+    <div class="ct-share-qr" hidden>
+        <div class="ct-share-qr-img">{{ _ct_share_url | qr_svg }}</div>
+        <p class="ct-share-qr-tip">用微信「扫一扫」在手机上打开，再转发给好友</p>
+    </div>
+    {%- endif -%}
 </div>

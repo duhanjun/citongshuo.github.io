@@ -18,3 +18,5 @@ gem "jekyll-redirect-from"
 gem "jekyll-sitemap"
 gem "webrick", "~> 1.7"
 gem "ruby-pinyin", "~> 0.5.0"
+
+gem "rqrcode", "~> 3.2"
