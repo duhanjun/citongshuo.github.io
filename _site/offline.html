@@ -47,6 +47,18 @@
 
     <title>Offline - 刺桐说 - 专业投资者共创社群</title>
 
+    <!-- 深色模式：尽早写入 data-theme，避免首屏闪白 -->
+    <script>
+        (function () {
+            try {
+                var pref = localStorage.getItem('ct-theme');
+                var dark = pref === 'dark' || (pref !== 'light' &&
+                    window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+                document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+            } catch (e) { }
+        })();
+    </script>
+
     <!-- Web App Manifest -->
     <link rel="manifest" href="/pwa/manifest.json">
 
@@ -61,6 +73,9 @@
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href=" /css/hux-blog.min.css">
+
+    <!-- 增量样式（深色模式 / 进度条 / 灯箱 / 分享 / 相关文章等） -->
+    <link rel="stylesheet" href="/css/citongshuo.css">
 
     <!-- Custom Fonts -->
     <!-- <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
@@ -156,6 +171,13 @@
                         
                         
                         
+                        
+                        
+                        <li class="theme-toggle">
+                            <a href="javascript:void(0)" aria-label="切换主题" title="切换主题">
+                                <i class="fa fa-desktop"></i>
+                            </a>
+                        </li>
                         <li class="search-icon">
                             <a href="javascript:void(0)">
                                 <i class="fa fa-search"></i>
@@ -342,6 +364,11 @@
     </div>    
 </footer>
 
+<!-- 阅读进度条 / 返回顶部 / 图片灯箱 -->
+<div id="ct-progress" aria-hidden="true"></div>
+<button id="ct-backtop" type="button" aria-label="返回顶部"><i class="fa fa-chevron-up"></i></button>
+<div id="ct-lightbox" role="dialog" aria-label="图片预览"><img loading="lazy" decoding="async" alt="图片预览"></div>
+
 <!-- jQuery -->
 <script src="/js/jquery.min.js "></script>
 
@@ -351,6 +378,9 @@
 
 <!-- Custom Theme JavaScript -->
 <script src="/js/hux-blog.min.js "></script>
+
+<!-- 增量交互（深色模式 / 进度条 / 返回顶部 / 灯箱 / 代码复制 / 分享） -->
+<script src="/js/citongshuo.js"></script>
 
 <!-- Service Worker -->
 
