@@ -1,0 +1,48 @@
+{% comment %}
+    相关文章：按标签重合度推荐（最多 5 篇）
+    @param {number} limit - 可选，最多显示篇数，默认 5
+{% endcomment %}
+
+{%- assign _ct_limit = include.limit | default: 5 -%}
+
+{%- capture _ct_items -%}
+{%- for _p in site.posts -%}
+{%- if _p.url != page.url and _p.tags and _p.tags.size > 0 -%}
+{%- assign _ct_score = 0 -%}
+{%- for _t in _p.tags -%}
+{%- if page.tags contains _t -%}{%- assign _ct_score = _ct_score | plus: 1 -%}{%- endif -%}
+{%- endfor -%}
+{%- if _ct_score > 0 -%}
+__CT_ITEM__{{ _ct_score | prepend: '000' | slice: -3, 3 }}|{{ _p.url }}|{{ _p.title | escape }}|{{ _p.date | date: '%Y-%m-%d' }}
+{%- endif -%}
+{%- endif -%}
+{%- endfor -%}
+{%- endcapture -%}
+
+{%- assign _ct_sorted = _ct_items | split: '__CT_ITEM__' | sort | reverse -%}
+
+{%- assign _ct_matched = 0 -%}
+{%- for _item in _ct_sorted -%}
+{%- assign _ct_parts = _item | split: '|' -%}
+{%- if _ct_parts.size == 4 -%}{%- assign _ct_matched = _ct_matched | plus: 1 -%}{%- endif -%}
+{%- endfor -%}
+
+{%- if _ct_matched > 0 -%}
+<div class="ct-related">
+    <hr>
+    <h5>相关文章</h5>
+    <ul>
+        {%- assign _ct_shown = 0 -%}
+        {%- for _item in _ct_sorted -%}
+        {%- assign _ct_parts = _item | split: '|' -%}
+        {%- if _ct_parts.size == 4 and _ct_shown < _ct_limit -%}
+        {%- assign _ct_shown = _ct_shown | plus: 1 -%}
+        <li>
+            <a href="{{ _ct_parts[1] | prepend: site.baseurl }}">{{ _ct_parts[2] }}</a>
+            <span class="ct-related-date">{{ _ct_parts[3] }}</span>
+        </li>
+        {%- endif -%}
+        {%- endfor -%}
+    </ul>
+</div>
+{%- endif -%}

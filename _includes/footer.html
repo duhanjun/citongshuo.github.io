@@ -20,6 +20,11 @@
     </div>    
 </footer>
 
+<!-- 阅读进度条 / 返回顶部 / 图片灯箱 -->
+<div id="ct-progress" aria-hidden="true"></div>
+<button id="ct-backtop" type="button" aria-label="返回顶部"><i class="fa fa-chevron-up"></i></button>
+<div id="ct-lightbox" role="dialog" aria-label="图片预览"><img alt="图片预览"></div>
+
 <!-- jQuery -->
 <script src="{{ "/js/jquery.min.js " | prepend: site.baseurl }}"></script>
 
@@ -29,6 +34,9 @@
 
 <!-- Custom Theme JavaScript -->
 <script src="{{ "/js/hux-blog.min.js " | prepend: site.baseurl }}"></script>
+
+<!-- 增量交互（深色模式 / 进度条 / 返回顶部 / 灯箱 / 代码复制 / 分享） -->
+<script src="{{ "/js/citongshuo.js" | prepend: site.baseurl }}"></script>
 
 <!-- Service Worker -->
 {% if site.service-worker %}

@@ -1,0 +1,9 @@
+{% comment %}
+    阅读时长估算
+    @param {string} content - 文章正文（HTML 或 Markdown 渲染结果）
+
+    中文按每分钟约 400 字估算；不足 1 分钟按 1 分钟计。
+{% endcomment %}
+{%- assign _ct_len = include.content | strip_html | strip_newlines | size -%}
+{%- assign _ct_minutes = _ct_len | divided_by: 400 | plus: 1 -%}
+阅读约 {{ _ct_minutes }} 分钟

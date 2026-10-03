@@ -1,0 +1,17 @@
+{% comment %}
+    文章社交分享：微信 / 微博 / QQ / 系统分享 / 复制链接
+    微信分享需在微信内打开，站外只能复制链接后粘贴，故按钮仅复制并提示。
+{% endcomment %}
+
+{%- assign _ct_share_url = site.url | append: page.url -%}
+{%- assign _ct_share_title = page.title | default: site.title -%}
+<div class="ct-share" data-url="{{ _ct_share_url }}" data-title="{{ _ct_share_title | escape }}">
+    <span class="ct-share-label">分享到</span>
+    <button type="button" data-ct-share="wechat">微信</button>
+    <a href="https://service.weibo.com/share/share.php?url={{ _ct_share_url | url_encode }}&amp;title={{ _ct_share_title | url_encode }}"
+        target="_blank" rel="noopener noreferrer">微博</a>
+    <a href="https://connect.qq.com/widget/shareqq/index.html?url={{ _ct_share_url | url_encode }}&amp;title={{ _ct_share_title | url_encode }}"
+        target="_blank" rel="noopener noreferrer">QQ</a>
+    <button type="button" data-ct-share="native">更多</button>
+    <button type="button" data-ct-share="copy">复制链接</button>
+</div>

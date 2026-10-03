@@ -1,0 +1,31 @@
+---
+layout: page
+title: 标签
+hide-in-nav: true
+permalink: /tags/
+description: "按标签浏览全部文章"
+header-bg-css: "linear-gradient(to right, #134e5e, #71b280)"
+---
+
+{% comment %}
+    标签聚合页：按标签分组列出全部文章。
+    排序：标签按名称升序；组内文章按发布时间倒序（site.tags 已按时间倒序）。
+{% endcomment %}
+
+{% assign _ct_tags = site.tags | sort %}
+{% for tag in _ct_tags %}
+<div class="ct-tag-group">
+    <h4>
+        <a href="{{ site.baseurl }}/archive/?tag={{ tag[0] | url_encode }}">{{ tag[0] }}</a>
+        <span class="ct-tag-count">{{ tag[1].size }} 篇</span>
+    </h4>
+    <ul>
+        {% for post in tag[1] %}
+        <li>
+            <a href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a>
+            <span class="ct-related-date">{{ post.date | date: '%Y-%m-%d' }}</span>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endfor %}

@@ -25,5 +25,6 @@
         {% endcapture %}
         {{ tags | split:'__SEPARATOR__' | sort }}
     </div>
+    <p class="ct-more-tags"><a href="{{ '/tags/' | prepend: site.baseurl }}">查看全部标签 &rarr;</a></p>
 </section>
 {% endif %}

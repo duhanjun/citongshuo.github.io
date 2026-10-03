@@ -26,6 +26,8 @@ layout: default
 					{{ content }}
 				</div>
 
+                {% include post-sharing.html %}
+
                 <hr style="visibility: hidden;">
                 <ul class="pager">
                     {% if page.previous.url %}
@@ -46,6 +48,8 @@ layout: default
                     {% endif %}
                 </ul>
                 <hr style="visibility: hidden;">
+
+                {% include post-related.html %}
 
                 {% if site.disqus_username %}
                 <!-- disqus 评论框 start -->

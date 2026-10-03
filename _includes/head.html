@@ -99,6 +99,18 @@
 
     <title>{% if page.title %}{{ page.title }} - {{ site.SEOTitle }}{% else %}{{ site.SEOTitle }}{% endif %}</title>
 
+    <!-- 深色模式：尽早写入 data-theme，避免首屏闪白 -->
+    <script>
+        (function () {
+            try {
+                var pref = localStorage.getItem('ct-theme');
+                var dark = pref === 'dark' || (pref !== 'light' &&
+                    window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+                document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+            } catch (e) { }
+        })();
+    </script>
+
     <!-- Web App Manifest -->
     <link rel="manifest" href="{{ site.baseurl }}/pwa/manifest.json">
 
@@ -113,6 +125,9 @@
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{{ " /css/hux-blog.min.css" | prepend: site.baseurl }}">
+
+    <!-- 增量样式（深色模式 / 进度条 / 灯箱 / 分享 / 相关文章等） -->
+    <link rel="stylesheet" href="{{ "/css/citongshuo.css" | prepend: site.baseurl }}">
 
     <!-- Custom Fonts -->
     <!-- <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->

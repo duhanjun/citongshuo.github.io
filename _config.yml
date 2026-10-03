@@ -57,6 +57,7 @@ plugins: [jekyll-paginate, jekyll-feed, jekyll-redirect-from, jekyll-sitemap]
 markdown: kramdown
 kramdown:
   input: GFM # use Github Flavored Markdown !important
+  footnote_backlink: "&#8617;&#xfe0e;" # 脚注回跳符号
   syntax_highlighter_opts:
     span:
       line_numbers: false
