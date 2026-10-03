@@ -314,6 +314,38 @@ html[data-theme="dark"] select {
   color: var(--ct-accent);
 }
 
+/* 微信二维码（桌面端扫码分享） */
+.ct-share-qr {
+  margin-top: 16px;
+}
+
+/* 类名规则会盖过 UA 的 [hidden]{display:none}，需显式声明 */
+.ct-share-qr[hidden] {
+  display: none;
+}
+
+.ct-share-qr-img {
+  display: inline-block;
+  /* 固定白底，保证深色模式下仍能被扫码识别；padding 兼作二维码静区（约 4 个模块宽） */
+  background: #fff;
+  padding: 14px;
+  border: 1px solid var(--ct-border);
+  border-radius: 6px;
+  line-height: 0;
+}
+
+.ct-share-qr-img svg {
+  display: block;
+  width: 160px;
+  height: 160px;
+}
+
+.ct-share-qr-tip {
+  margin: 8px 0 0;
+  font-size: 12px;
+  color: var(--ct-text-muted);
+}
+
 /* ============================ 相关文章 ============================ */
 .ct-related {
   margin-top: 50px;

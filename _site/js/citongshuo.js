@@ -208,8 +208,24 @@
           toast("当前浏览器不支持自动复制");
         }
       } else if (kind === "wechat") {
-        if (navigator.clipboard) navigator.clipboard.writeText(url).catch(function () {});
-        toast("链接已复制，请在微信中粘贴分享");
+        // 桌面端无法唤起微信，展开二维码让用户扫码到手机后再转发；
+        // 触屏设备直接走系统分享面板（微信会出现在其中），不支持时退回复制链接。
+        var qr = box.querySelector(".ct-share-qr");
+        var touch = window.matchMedia("(pointer: coarse)").matches;
+        if (touch && navigator.share) {
+          navigator.share({ title: title, url: url }).catch(function () {});
+        } else if (!touch && qr) {
+          qr.hidden = !qr.hidden;
+          el.setAttribute("aria-expanded", qr.hidden ? "false" : "true");
+        } else if (navigator.clipboard) {
+          navigator.clipboard.writeText(url).then(function () {
+            toast("链接已复制，请在微信中粘贴分享");
+          }, function () {
+            toast("复制失败，请手动复制地址栏链接");
+          });
+        } else {
+          toast("请手动复制地址栏链接后分享");
+        }
       } else if (kind === "native") {
         if (navigator.share) {
           navigator.share({ title: title, url: url }).catch(function () {});
