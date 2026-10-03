@@ -36,6 +36,7 @@ exclude:
     "node_modules",
     "README.md",
     "README.zh.md",
+    "LICENSE",
     "mise.toml",
     "历史文章.zip",
     "scripts",
