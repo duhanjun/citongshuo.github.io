@@ -3,12 +3,13 @@
 {% endcomment %}
 
 {% if site.featured-tags %}
+{%- assign _ct_ui = site.data.ui-text[site.ui_lang] -%}
 <section>
     {% if include.bottom %}
         <hr class="hidden-sm hidden-xs">
     {% endif %}
     <hr>
-    <h5><a href="{{'/archive/' | prepend: site.baseurl }}">特色标签</a></h5>
+    <h5><a href="{{'/archive/' | prepend: site.baseurl }}">{{ _ct_ui.featured_tags }}</a></h5>
     <div class="tags">
         {% capture tags %}
         {% comment %}
@@ -25,6 +26,6 @@
         {% endcapture %}
         {{ tags | split:'__SEPARATOR__' | sort }}
     </div>
-    <p class="ct-more-tags"><a href="{{ '/tags/' | prepend: site.baseurl }}">查看全部标签 &rarr;</a></p>
+    <p class="ct-more-tags"><a href="{{ '/tags/' | prepend: site.baseurl }}">{{ _ct_ui.view_all_tags }} &rarr;</a></p>
 </section>
 {% endif %}

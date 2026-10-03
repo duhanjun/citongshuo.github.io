@@ -30,7 +30,7 @@ __CT_ITEM__{{ _ct_score | prepend: '000' | slice: -3, 3 }}|{{ _p.url }}|{{ _p.ti
 {%- if _ct_matched > 0 -%}
 <div class="ct-related">
     <hr>
-    <h5>相关文章</h5>
+    <h5>{{ site.data.ui-text[site.ui_lang].related_posts }}</h5>
     <ul>
         {%- assign _ct_shown = 0 -%}
         {%- for _item in _ct_sorted -%}

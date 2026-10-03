@@ -29,6 +29,8 @@ RSS: true
 highlighter: rouge
 permalink: pretty
 paginate: 10
+# 界面文案语言（对应 _data/ui-text.yml 下的 key）
+ui_lang: zh
 exclude:
   [
     "less",
@@ -49,6 +51,26 @@ anchorjs: true # if you want to customize anchor. check out line:181 of `post.ht
 # make sure you have this gem installed
 # `$ gem install jekyll-paginate`
 plugins: [jekyll-paginate, jekyll-feed, jekyll-redirect-from, jekyll-sitemap]
+
+# 全站压缩（jekyll-minifier 由 Gemfile 的 jekyll_plugins 分组自动加载，
+# 故此处无需写进上面 plugins: —— 这样上游 GitHub Pages 不会因白名单外的插件报错）
+# 注意：该插件只在 JEKYLL_ENV=production 时才真正压缩，构建脚本已设置该变量。
+jekyll-minifier:
+  # HTML 压缩（htmlcompressor）：保留标签间空格，避免行内元素粘连影响排版
+  remove_comments: true
+  remove_intertag_spaces: false
+  # 代码块/文本域内的空白有语义，整体保护起来不参与压缩
+  preserve_patterns:
+    - "<pre\\b[^>]*>[\\s\\S]*?</pre>"
+    - "<code\\b[^>]*>[\\s\\S]*?</code>"
+    - "<textarea\\b[^>]*>[\\s\\S]*?</textarea>"
+  # 行内与独立的 CSS/JS/JSON 压缩（JS 走 Terser，支持 ES6+）
+  compress_css: true
+  compress_javascript: true
+  compress_json: true
+  # Service Worker 单独排除：它不参与站点渲染，且改写过压缩产物风险高
+  exclude:
+    - "sw.js"
 
 # Markdown settings
 # replace redcarpet to kramdown,

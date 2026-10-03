@@ -1,6 +1,7 @@
 /*!
  * citongshuo 增量样式（不修改 vendored 的 hux-blog.css / bootstrap.css，便于主题升级）
- * 内容：深色模式、阅读进度条、返回顶部、图片灯箱、社交分享、相关文章、代码复制、标签聚合页
+ * 内容：深色模式、阅读进度条、返回顶部、图片灯箱、社交分享、相关文章、代码复制、
+ *       标签聚合页、Callout 提示块、置顶标记、Mermaid 流程图
  */
 
 /* ============================ 主题变量 ============================ */
@@ -458,4 +459,115 @@ html[data-theme="dark"] select {
 #ct-toast.show {
   opacity: 1;
   transform: translateX(-50%) translateY(0);
+}
+
+/* ============================ Callout 提示块 ============================ */
+/* 用法：在 Markdown 引用块后加 IAL 指定类型，例如
+       > 这里是要强调的内容
+       {: .ct-callout .ct-callout-warn }
+   类型：.ct-callout-tip（提示）/ .ct-callout-info（说明）/
+         .ct-callout-warn（注意）/ .ct-callout-danger（风险） */
+.post-container .ct-callout {
+  margin: 1.4em 0;
+  padding: 12px 18px;
+  border-left: 4px solid var(--ct-callout-color, #0277bd);
+  border-radius: 4px;
+  background: var(--ct-callout-bg, rgba(2, 119, 189, 0.08));
+  color: var(--ct-text);
+}
+
+.post-container .ct-callout::before {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: var(--ct-callout-color, #0277bd);
+}
+
+.post-container .ct-callout > p:last-child {
+  margin-bottom: 0;
+}
+
+.post-container .ct-callout-tip {
+  --ct-callout-color: #2e7d32;
+  --ct-callout-bg: rgba(46, 125, 50, 0.08);
+}
+
+.post-container .ct-callout-tip::before {
+  content: "提示";
+}
+
+.post-container .ct-callout-info {
+  --ct-callout-color: #0277bd;
+  --ct-callout-bg: rgba(2, 119, 189, 0.08);
+}
+
+.post-container .ct-callout-info::before {
+  content: "说明";
+}
+
+.post-container .ct-callout-warn {
+  --ct-callout-color: #ef6c00;
+  --ct-callout-bg: rgba(239, 108, 0, 0.1);
+}
+
+.post-container .ct-callout-warn::before {
+  content: "注意";
+}
+
+.post-container .ct-callout-danger {
+  --ct-callout-color: #c62828;
+  --ct-callout-bg: rgba(198, 40, 40, 0.09);
+}
+
+.post-container .ct-callout-danger::before {
+  content: "风险";
+}
+
+/* 深色模式下加深底色，保证与页面背景有区分 */
+html[data-theme="dark"] .post-container .ct-callout {
+  color: var(--ct-text);
+}
+
+html[data-theme="dark"] .post-container .ct-callout-tip {
+  --ct-callout-bg: rgba(46, 125, 50, 0.18);
+}
+
+html[data-theme="dark"] .post-container .ct-callout-info {
+  --ct-callout-bg: rgba(2, 119, 189, 0.18);
+}
+
+html[data-theme="dark"] .post-container .ct-callout-warn {
+  --ct-callout-bg: rgba(239, 108, 0, 0.18);
+}
+
+html[data-theme="dark"] .post-container .ct-callout-danger {
+  --ct-callout-bg: rgba(198, 40, 40, 0.2);
+}
+
+/* ============================ 置顶标记 ============================ */
+.ct-pin-badge {
+  display: inline-block;
+  margin-right: 8px;
+  padding: 1px 6px;
+  font-size: 12px;
+  font-weight: normal;
+  line-height: 1.6;
+  vertical-align: middle;
+  color: #fff;
+  background: var(--ct-accent);
+  border-radius: 3px;
+}
+
+/* ============================ Mermaid 流程图 ============================ */
+.post-container .mermaid {
+  margin: 1.4em 0;
+  text-align: center;
+  overflow-x: auto;
+}
+
+.post-container .mermaid svg {
+  max-width: 100%;
+  height: auto;
 }

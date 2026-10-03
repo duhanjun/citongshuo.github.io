@@ -1,0 +1,46 @@
+{% comment %}
+    Mermaid 流程图（按需加载）
+    用法：文章 front matter 设置 `mermaid: true`，正文用 ```mermaid 代码块书写。
+    脚本从 CDN 加载（国内优先 BootCDN，失败回退 jsDelivr），不增加未开启文章的负担。
+{% endcomment %}
+<script>
+(function () {
+    var CDNS = [
+        "https://cdn.bootcdn.net/ajax/libs/mermaid/10.9.1/mermaid.min.js",
+        "https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.min.js"
+    ];
+    var idx = 0;
+
+    function render() {
+        if (!window.mermaid) return;
+        var dark = document.documentElement.getAttribute("data-theme") === "dark";
+        window.mermaid.initialize({
+            startOnLoad: false,
+            theme: dark ? "dark" : "default",
+            securityLevel: "strict"
+        });
+        // 把 ```mermaid 代码块替换为 mermaid 容器（连同高亮外壳一起替换，避免残留空壳）
+        var codes = document.querySelectorAll(".post-container pre > code.language-mermaid");
+        Array.prototype.forEach.call(codes, function (code) {
+            var box = document.createElement("div");
+            box.className = "mermaid";
+            box.textContent = code.textContent;
+            var target = code.closest(".highlight") || code.closest("pre");
+            target.parentNode.replaceChild(box, target);
+        });
+        var nodes = document.querySelectorAll(".post-container .mermaid");
+        if (nodes.length) window.mermaid.run({ nodes: nodes });
+    }
+
+    function load() {
+        if (idx >= CDNS.length) return;
+        var s = document.createElement("script");
+        s.src = CDNS[idx++];
+        s.onload = render;
+        s.onerror = load;
+        document.head.appendChild(s);
+    }
+
+    load();
+})();
+</script>

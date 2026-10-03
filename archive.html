@@ -23,9 +23,9 @@ https://github.com/kitian616/jekyll-TeXt-theme
 			<!-- Tags (as filter) -->
 			<div id='tag_cloud' class="tags tags-sup js-tags">
 				<a class="tag-button--all" data-encode="">
-					Show All
-					<sup>{{site.posts.size}}</sup>
-				</a>
+						{{ site.data.ui-text[site.ui_lang].archive_show_all }}
+						<sup>{{site.posts.size}}</sup>
+					</a>
 
 				{% capture tags %}
 				{% for tag in site.tags %}

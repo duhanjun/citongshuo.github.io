@@ -6,21 +6,22 @@
     二维码在构建期生成（_plugins/qr_svg.rb），不依赖任何外部服务。
 {% endcomment %}
 
+{%- assign _ct_ui = site.data.ui-text[site.ui_lang] -%}
 {%- assign _ct_share_url = site.url | append: page.url -%}
 {%- assign _ct_share_title = page.title | default: site.title -%}
 <div class="ct-share" data-url="{{ _ct_share_url }}" data-title="{{ _ct_share_title | escape }}">
-    <span class="ct-share-label">分享到</span>
-    <button type="button" data-ct-share="wechat" aria-expanded="false">微信</button>
+    <span class="ct-share-label">{{ _ct_ui.share.label }}</span>
+    <button type="button" data-ct-share="wechat" aria-expanded="false">{{ _ct_ui.share.wechat }}</button>
     <a href="https://service.weibo.com/share/share.php?url={{ _ct_share_url | url_encode }}&amp;title={{ _ct_share_title | url_encode }}"
-        target="_blank" rel="noopener noreferrer">微博</a>
+        target="_blank" rel="noopener noreferrer">{{ _ct_ui.share.weibo }}</a>
     <a href="https://connect.qq.com/widget/shareqq/index.html?url={{ _ct_share_url | url_encode }}&amp;title={{ _ct_share_title | url_encode }}"
-        target="_blank" rel="noopener noreferrer">QQ</a>
-    <button type="button" data-ct-share="native">更多</button>
-    <button type="button" data-ct-share="copy">复制链接</button>
+        target="_blank" rel="noopener noreferrer">{{ _ct_ui.share.qq }}</a>
+    <button type="button" data-ct-share="native">{{ _ct_ui.share.more }}</button>
+    <button type="button" data-ct-share="copy">{{ _ct_ui.share.copy }}</button>
     {%- if site.qr_svg_available -%}
     <div class="ct-share-qr" hidden>
         <div class="ct-share-qr-img">{{ _ct_share_url | qr_svg }}</div>
-        <p class="ct-share-qr-tip">用微信「扫一扫」在手机上打开，再转发给好友</p>
+        <p class="ct-share-qr-tip">{{ _ct_ui.share.qr_tip }}</p>
     </div>
     {%- endif -%}
 </div>

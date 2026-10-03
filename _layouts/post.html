@@ -33,7 +33,7 @@ layout: default
                     {% if page.previous.url %}
                     <li class="previous">
                         <a href="{{ page.previous.url | prepend: site.baseurl | replace: '//', '/' }}" data-toggle="tooltip" data-placement="top" title="{{page.previous.title}}">
-                        上一篇<br>
+                        {{ site.data.ui-text[site.ui_lang].prev_post }}<br>
                         <span>{{page.previous.title}}</span>
                         </a>
                     </li>
@@ -41,7 +41,7 @@ layout: default
                     {% if page.next.url %}
                     <li class="next">
                         <a href="{{ page.next.url | prepend: site.baseurl | replace: '//', '/' }}" data-toggle="tooltip" data-placement="top" title="{{page.next.title}}">
-                        下一篇<br>
+                        {{ site.data.ui-text[site.ui_lang].next_post }}<br>
                         <span>{{page.next.title}}</span>
                         </a>
                     </li>
@@ -102,6 +102,11 @@ layout: default
 <!-- add support for mathjax by voleking-->
 {% if page.mathjax %}
   {% include mathjax_support.html %}
+{% endif %}
+
+<!-- Mermaid 流程图（front matter: mermaid: true） -->
+{% if page.mermaid %}
+  {% include mermaid.html %}
 {% endif %}
 
 {% if site.netease_comment %}

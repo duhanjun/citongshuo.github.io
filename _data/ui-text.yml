@@ -1,0 +1,24 @@
+# 界面文案（i18n）
+# 模板统一通过 site.data.ui-text[site.ui_lang] 读取，site.ui_lang 在 _config.yml 中配置。
+# 新增语言：复制 zh 段并改 key 名，再把 _config.yml 的 ui_lang 指向它即可。
+zh:
+  read_time: "阅读约 %n 分钟"      # %n 会被替换为估算出的分钟数
+  updated_at: "更新于"
+  pin_badge: "置顶"
+  related_posts: "相关文章"
+  prev_post: "上一篇"
+  next_post: "下一篇"
+  prev_page: "上一页"
+  next_page: "下一页"
+  featured_tags: "特色标签"
+  view_all_tags: "查看全部标签"
+  post_count_unit: "篇"
+  archive_show_all: "全部"
+  share:
+    label: "分享到"
+    wechat: "微信"
+    weibo: "微博"
+    qq: "QQ"
+    more: "更多"
+    copy: "复制链接"
+    qr_tip: "用微信「扫一扫」在手机上打开，再转发给好友"

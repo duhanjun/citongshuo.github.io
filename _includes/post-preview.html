@@ -1,0 +1,28 @@
+{% comment %}
+    首页文章卡片
+    @param {object} post - 文章对象
+    @param {boolean} pinned - 是否为置顶卡片（显示「置顶」标记）
+{% endcomment %}
+<div class="post-preview">
+    <a href="{{ include.post.url | prepend: site.baseurl }}">
+        <h2 class="post-title">
+            {% if include.pinned %}<span class="ct-pin-badge">{{ site.data.ui-text[site.ui_lang].pin_badge }}</span>{% endif %}{{ include.post.title }}
+        </h2>
+        {% if include.post.subtitle %}
+        <h3 class="post-subtitle">
+            {{ include.post.subtitle }}
+        </h3>
+        {% endif %}
+        <div class="post-content-preview">
+            {% if include.post.lang == 'en' %}
+                {{ include.post.content | strip_html | truncate:300 }}
+            {% else %}
+                {{ include.post.content | strip_html | truncate:200 }}
+            {% endif %}
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by {% if include.post.author %}{{ include.post.author }}{% else %}{{ site.title }}{% endif %} on {{ include.post.date | date: "%B %-d, %Y" }}
+    </p>
+</div>
+<hr>

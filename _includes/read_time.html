@@ -6,4 +6,4 @@
 {% endcomment %}
 {%- assign _ct_len = include.content | strip_html | strip_newlines | size -%}
 {%- assign _ct_minutes = _ct_len | divided_by: 400 | plus: 1 -%}
-阅读约 {{ _ct_minutes }} 分钟
+{{- site.data.ui-text[site.ui_lang].read_time | replace: '%n', _ct_minutes -}}

@@ -17,7 +17,7 @@ header-bg-css: "linear-gradient(to right, #134e5e, #71b280)"
 <div class="ct-tag-group">
     <h4>
         <a href="{{ site.baseurl }}/archive/?tag={{ tag[0] | url_encode }}">{{ tag[0] }}</a>
-        <span class="ct-tag-count">{{ tag[1].size }} 篇</span>
+        <span class="ct-tag-count">{{ tag[1].size }} {{ site.data.ui-text[site.ui_lang].post_count_unit }}</span>
     </h4>
     <ul>
         {% for post in tag[1] %}

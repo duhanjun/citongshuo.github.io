@@ -3,30 +3,22 @@ layout: page
 header-img: "img/home-bg.jpg"
 header-mask: 0.5
 ---
-{% for post in paginator.posts %}
-<div class="post-preview">
-    <a href="{{ post.url | prepend: site.baseurl }}">
-        <h2 class="post-title">
-            {{ post.title }}
-        </h2>
-        {% if post.subtitle %}
-        <h3 class="post-subtitle">
-            {{ post.subtitle }}
-        </h3>
-        {% endif %}
-        <div class="post-content-preview">
-            {% if post.lang == 'en' %}
-                {{ post.content | strip_html | truncate:300 }}
-            {% else %}
-                {{ post.content | strip_html | truncate:200 }}
-            {% endif %}
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by {% if post.author %}{{ post.author }}{% else %}{{ site.title }}{% endif %} on {{ post.date | date: "%B %-d, %Y" }}
-    </p>
+{%- assign _ct_ui = site.data.ui-text[site.ui_lang] -%}
+{%- assign _ct_pinned = site.posts | where: "pin", true -%}
+
+{% comment %} 置顶文章：front matter 设 pin: true，优先展示在首页最前 {% endcomment %}
+{% if _ct_pinned.size > 0 %}
+<div class="ct-pinned-list">
+    {% for post in _ct_pinned %}
+    {% include post-preview.html post=post pinned=true %}
+    {% endfor %}
 </div>
-<hr>
+{% endif %}
+
+{% for post in paginator.posts %}
+{% unless post.pin %}
+{% include post-preview.html post=post %}
+{% endunless %}
 {% endfor %}
 
 <!-- Pager -->
@@ -34,12 +26,12 @@ header-mask: 0.5
 <ul class="pager">
     {% if paginator.previous_page %}
     <li class="previous">
-        <a href="{{ paginator.previous_page_path | prepend: site.baseurl | replace: '//', '/' }}">&larr; 上一页</a>
+        <a href="{{ paginator.previous_page_path | prepend: site.baseurl | replace: '//', '/' }}">&larr; {{ _ct_ui.prev_page }}</a>
     </li>
     {% endif %}
     {% if paginator.next_page %}
     <li class="next">
-        <a href="{{ paginator.next_page_path | prepend: site.baseurl | replace: '//', '/' }}">下一页 &rarr;</a>
+        <a href="{{ paginator.next_page_path | prepend: site.baseurl | replace: '//', '/' }}">{{ _ct_ui.next_page }} &rarr;</a>
     </li>
     {% endif %}
 </ul>

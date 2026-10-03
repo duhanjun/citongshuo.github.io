@@ -208,8 +208,11 @@ self.addEventListener('fetch', event => {
     // Stale-while-revalidate for the remaining static resources
     // similar to HTTP's stale-while-revalidate: https://www.mnot.net/blog/2007/12/12/stale
     // Upgrade from Jake's to Surma's: https://gist.github.com/surma/eb441223daaedf880801ad80006389f1
+    // 注意：静态资源不再追加 cache-bust 查询串——那会让边缘/CDN 缓存对每个时间戳都变成
+    // 未命中，等于绕过 CDN。这里改用 cache: "no-store" 让浏览器侧缓存失效并回源，同时
+    // 保持 URL 干净、享受边缘缓存。cache-bust 只保留给上面的 HTML 导航请求。
     const cached = caches.match(event.request);
-    const fetched = fetch(getCacheBustingUrl(event.request), { cache: "no-store" });
+    const fetched = fetch(event.request, { cache: "no-store" });
     const fetchedCopy = fetched.then(resp => resp.clone());
     
     // Call respondWith() with whatever we get first.
