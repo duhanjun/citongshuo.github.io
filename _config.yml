@@ -33,9 +33,7 @@ paginate: 10
 ui_lang: zh
 exclude:
   [
-    "less",
     "node_modules",
-    "Gruntfile.js",
     "README.md",
     "README.zh.md",
     "mise.toml",
