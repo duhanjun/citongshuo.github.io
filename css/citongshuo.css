@@ -196,9 +196,41 @@ html[data-theme="dark"] select {
   color: var(--ct-text);
 }
 
-/* ============================ 主题切换按钮 ============================ */
-.theme-toggle a {
+/* ================= 右下角浮动工具：主题切换（常显）+ 返回顶部（滚动后出现） ================= */
+/* 主题切换已从导航菜单移出，与「返回顶部」组成固定工具组，所有页面与屏幕宽度都可见 */
+#ct-tools {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 1500;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+#ct-tools .theme-toggle a,
+#ct-backtop {
+  display: block;
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: var(--ct-accent);
+  color: #fff;
+  font-size: 18px;
+  line-height: 42px;
+  text-align: center;
+  text-decoration: none;
   cursor: pointer;
+  box-shadow: 0 2px 8px var(--ct-shadow);
+}
+
+#ct-tools .theme-toggle a:hover,
+#ct-backtop:hover {
+  opacity: 0.85;
+  color: #fff;
 }
 
 .theme-toggle .fa-sun,
@@ -219,32 +251,25 @@ html[data-theme="dark"] select {
 }
 
 /* ============================ 返回顶部 ============================ */
+/* 尺寸与配色复用上方「右下角浮动工具」的共享规则，这里只管显示时机 */
 #ct-backtop {
-  position: fixed;
-  right: 24px;
-  bottom: 24px;
-  width: 42px;
-  height: 42px;
-  padding: 0;
-  border: none;
-  border-radius: 50%;
-  background: var(--ct-accent);
-  color: #fff;
-  font-size: 18px;
-  line-height: 42px;
-  text-align: center;
-  cursor: pointer;
   display: none;
-  z-index: 1500;
-  box-shadow: 0 2px 8px var(--ct-shadow);
 }
 
 #ct-backtop.show {
   display: block;
 }
 
-#ct-backtop:hover {
-  opacity: 0.85;
+/* ============================ 文章目录滚动条 ============================ */
+/* 目录侧栏的滚动条偏粗且常驻，隐藏掉；滚轮 / 触控板 / 键盘仍可正常滚动 */
+/* 写法与 jekyll-theme-chirpy 对 sidebar / toc 的处理一致 */
+.side-catalog {
+  -ms-overflow-style: none; /* IE / Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.side-catalog::-webkit-scrollbar {
+  display: none; /* Chrome / Safari / Edge */
 }
 
 /* ============================ 图片灯箱 ============================ */
