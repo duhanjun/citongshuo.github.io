@@ -15,21 +15,6 @@ tags:
     - 价值投资
 ---
 
-我们的投资框架已接入AI大模型
-{: .text-center}
-
-点击 『刺桐说Pro』 分析牛股
-{: .text-center}
-
-量化交易实战入门课程已更新完结
-{: .text-center}
-
-点击 『课程目录』 一起从0到1学习
-{: .text-center}
-
-————————— START —————————
-{: .text-center}
-
 ## 一、刺桐说Pro入驻应用宝
 
 ### 入驻应用宝的意义
@@ -88,9 +73,7 @@ tags:
 ![Image](/img/citongshuo-pro-tencent-ai-zone-7.png)
 
 欢迎扫码体验刺桐说Pro
-{: .text-center}
 
 ![Image](/img/citongshuo-pro-tencent-ai-zone-8.jpeg)
 
 免责声明：本文仅为市场分析，基于公开信息整理，不构成任何投资建议。作者未持有证券投资咨询资格，相关内容仅供参考。投资有风险，入市需谨慎！
-{: .text-center}
