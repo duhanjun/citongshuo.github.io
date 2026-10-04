@@ -22,7 +22,7 @@ tags:
 
 不论你是 WorkBuddy 用户，还是习惯用 Claude Desktop、Cursor、Trae 等客户端，都可以用上它。本文一次说清：它是什么、能做什么、怎么装，以及为什么要趁现在加入刺桐说。
 
-![Image](/img/citongshuo-knowledge-connector-1.png)
+![Image](/img/citongshuo-knowledge-connector-1.jpg)
 
 ## 一、为什么要做「刺桐说金融知识」连接器
 
@@ -71,7 +71,7 @@ flowchart LR
 
 四个工具都是**只读查询**：不会上传文件、不会修改或删除任何内容，也不需要为每一次调用做二次确认。你可以放心把它当作一个"只进不出"的资料入口。
 
-![Image](/img/citongshuo-knowledge-connector-2.png)
+![Image](/img/citongshuo-knowledge-connector-2.jpg)
 
 ## 三、真实使用示例：它到底好用在哪
 
