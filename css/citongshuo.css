@@ -373,33 +373,52 @@ html[data-theme="dark"] select {
 }
 
 /* ============================ 相关文章 ============================ */
+/* 与侧栏模块（特色标签 / 友情链接）统一视觉语言：
+   hr 分段 + 灰色小标题 + 不带逐条分隔线的纯列表 */
 .ct-related {
   margin-top: 50px;
 }
 
+/* 该模块在 .post-container 内，需覆盖正文 h5 样式（50px 上边距 / 20px 字号），
+   对齐 .sidebar-container h5 的模块标题观感 */
 .ct-related h5 {
+  margin: 0 0 18px;
+  padding-bottom: 0;
+  font-size: 14px;
+  font-weight: 700;
   color: var(--ct-text-muted);
-  padding-bottom: 0.6em;
 }
 
 .ct-related ul {
   list-style: none;
   padding-left: 0;
+  margin: 0;
 }
 
 .ct-related li {
-  padding: 8px 0;
-  border-bottom: 1px solid var(--ct-border);
+  padding: 0;
+}
+
+.ct-related li + li {
+  margin-top: 14px;
 }
 
 .ct-related li a {
+  display: block;
   color: var(--ct-link);
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.ct-related li a:hover {
+  color: var(--ct-link-hover);
 }
 
 .ct-related li .ct-related-date {
+  display: block;
+  margin: 3px 0 0;
   color: var(--ct-text-muted);
-  font-size: 13px;
-  margin-left: 8px;
+  font-size: 12px;
 }
 
 /* ============================ 代码块复制 ============================ */
