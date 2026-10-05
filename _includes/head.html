@@ -18,7 +18,7 @@
     {% assign og_desc = site.description %}
     {% endif %}
     {% comment %} 分享图：默认用站点卡片；文章优先封面、其次正文首图 {% endcomment %}
-    {% assign og_image = '/img/og-default-square.jpg' | prepend: site.baseurl | prepend: site.url %}
+    {% assign og_image = '/img/icon_wechat.png' | prepend: site.baseurl | prepend: site.url %}
     {% if page.layout == 'post' %}
     {% assign og_image_path = page.header-img %}
     {% unless og_image_path %}
