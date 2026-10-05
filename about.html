@@ -2,29 +2,20 @@
 layout: page
 title: "加入社群"
 hide-in-nav: false
-description: "欢迎志同道合的投资者加入"
+description: "专业投资者共创社群。成员来自券商、基金、期货、银行等机构，共享市场观点、交易复盘与投研资源，与常驻嘉宾实时对话，让研究有方法、决策有依据。"
 header-img: "img/cover-community.jpg"
 header-mask: 0.3
 hide-header-text: true
-multilingual: true
 ---
 
 <!-- header-img: "img/bg-me-2022.jpg" -->
 <!-- header-mask: 0.3 -->
 <!-- header-mask: 0.3 -->
 
-{% include multilingual-sel.html %}
-
 <!-- Chinese Version -->
-<div class="zh post-container">
+<div class="post-container">
     {% capture about_zh %}{% include about/zh.md %}{% endcapture %}
     {{ about_zh | markdownify }}
-</div>
-
-<!-- English Version -->
-<div class="en post-container">
-    {% capture about_en %}{% include about/en.md %}{% endcapture %}
-    {{ about_en | markdownify }}
 </div>
 
 

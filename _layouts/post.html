@@ -16,11 +16,6 @@ layout: default
                 col-md-10 col-md-offset-1
                 post-container">
 
-                <!-- Multi-Lingual -->
-                {% if page.multilingual %}
-                    {% include multilingual-sel.html %}
-                {% endif %}
-
 				<!-- Pagefind 全文搜索只索引正文，不含上下篇导航/评论/页脚 -->
 				<div data-pagefind-body>
 					{{ content }}
