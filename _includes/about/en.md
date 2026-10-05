@@ -1,4 +1,4 @@
-##### **Introduction**
+##### **Community Introduction**
 
 Citongshuo is a professional, rigorous and pragmatic community of investors, with members from institutions such as securities firms, funds, futures companies and banks. We believe that when a group of people come together, they can create value beyond the individual.
 
