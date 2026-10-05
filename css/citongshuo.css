@@ -590,6 +590,15 @@ html[data-theme="dark"] .post-container .ct-callout-danger {
   --ct-callout-bg: rgba(198, 40, 40, 0.2);
 }
 
+/* ============================ 营销转化区 ============================ */
+/* 用法：页面尾部的转化内容（适宜人群 / 二维码 / 订阅文案）整块居中，
+   并与正文拉开距离，突显「行动号召」。
+   HTML：<div class="ct-convert" markdown="1">…</div> */
+.post-container .ct-convert {
+  margin-top: 3.5em;
+  text-align: center;
+}
+
 /* ============================ 置顶标记 ============================ */
 .ct-pin-badge {
   display: inline-block;
