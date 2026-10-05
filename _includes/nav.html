@@ -24,18 +24,11 @@
                             <a href="{{ site.baseurl }}/">最新观点</a>
                         </li>
                         <li>
-                            <a href="https://k.youshop10.com/WH46k8Qh">加入社群</a>
+                            <a href="{{ site.baseurl }}/about/">加入社群</a>
                         </li>
                         <li>
-                            <a href="https://k.youshop10.com/FGUoVzrL">会员服务</a>
+                            <a href="{{ site.baseurl }}/membership/">会员服务</a>
                         </li>
-                        {% for page in site.pages %}
-                        {% if page.title and page.hide-in-nav != true %}
-                        <li>
-                            <a href="{{ page.url | prepend: site.baseurl }}">{{ page.title }}</a>
-                        </li>
-                        {% endif %}
-                        {% endfor %}
                         <li class="search-icon">
                             <a href="javascript:void(0)">
                                 <i class="fa fa-search"></i>
