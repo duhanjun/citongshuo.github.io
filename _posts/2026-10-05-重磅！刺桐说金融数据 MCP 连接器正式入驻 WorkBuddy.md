@@ -8,6 +8,7 @@ slug: "citongshuo-data-mcp-workbuddy"
 header-bg-css: "#060608"
 header-mask: 0.3
 mathjax: false
+mermaid: true
 tags:
     - 游资策略
     - 短线交易
@@ -48,33 +49,67 @@ MCP（Model Context Protocol）可以理解成**"给 AI 装上数据接口的通
 
 ## 三、非 WorkBuddy 用户：一行配置接入自定义 MCP 客户端
 
-「刺桐说金融数据」是一个标准的 MCP Streamable HTTP 服务，任何兼容 MCP 的客户端都能接入。把下面这段配置放进客户端对应的 mcp 配置文件即可：
+「刺桐说金融数据」是一个标准的 MCP Streamable HTTP 服务，任何兼容 MCP 的客户端都能接入。
+
+**连接信息**
+
+- 服务地址：`https://data.citongshuo.online/mcp`
+- 认证方式：请求头 `Authorization: Bearer <你的会员密钥>`
+
+### Trae / Cursor 等客户端
+
+Trae、Cursor 等客户端，把下面这段放进 MCP 配置即可：
 
 ```json
 {
   "mcpServers": {
     "citongshuo-data": {
-      "type": "streamableHttp",
       "url": "https://data.citongshuo.online/mcp",
-      "headers": { "Authorization": "Bearer 你的会员密钥" },
-      "timeout": 60000
+      "headers": { "Authorization": "Bearer 你的会员密钥" }
     }
   }
 }
 ```
 
-- **服务地址**：`https://data.citongshuo.online/mcp`
-- **认证方式**：请求头 `Authorization: Bearer <你的会员密钥>`
-
-各客户端的落点：
-
-- **Claude Desktop**：编辑 `claude_desktop_config.json`；
+- **Trae**：设置 → MCP → 添加 → 手动添加（也可写入项目根目录的 `.trae/mcp.json`）；
 - **Cursor**：编辑 `.cursor/mcp.json`；
-- **Trae**：在 MCP 面板添加自定义服务器，选择 Streamable HTTP，填入同样的地址与请求头。
+- 若你的客户端要求显式声明传输类型，补上 `"type": "http"` 即可。
 
-配置完成后重启客户端，你就能在工具列表里看到 35 个以 `citongshuo_data_` 开头的工具。
+保存后重启客户端（或刷新 MCP 列表），工具列表里就会出现 35 个以 `citongshuo_data_` 开头的工具。
+
+### Claude Desktop 用户
+
+Claude 桌面端的远程 MCP 不走配置文件，而是通过「连接器」添加：
+
+1. 打开「自定义 / 设置（Customize）→ 连接器（Connectors）」→「添加自定义连接器（Add custom connector）」；
+2. 填入服务地址：`https://data.citongshuo.online/mcp`；
+3. 鉴权选择「No sign-in」（API Key 方式），在「请求头（Request headers）」中填入 `Authorization: Bearer 你的会员密钥`。
+
+> 「请求头」入口仍在逐步放开，如果你的版本暂时没有这一项，可改用代理方式：在 `claude_desktop_config.json` 中通过 `mcp-remote` 连接（需本机已安装 Node.js）。
+{: .ct-callout .ct-callout-info }
+
+```json
+{
+  "mcpServers": {
+    "citongshuo-data": {
+      "command": "npx",
+      "args": ["-y", "mcp-remote", "https://data.citongshuo.online/mcp", "--header", "Authorization: Bearer 你的会员密钥"]
+    }
+  }
+}
+```
 
 ## 四、它到底能查什么？35 个工具全覆盖
+
+用一句话提问，剩下的由 AI 自动完成：
+
+```mermaid
+flowchart LR
+    A["你的提问"] --> B["AI 判断需要哪些数据"]
+    B --> C["citongshuo_data_* 工具（35 个）"]
+    C --> D["K线 / 财务 / 资金流<br/>筹码 / 龙虎榜 / 研报…"]
+    D --> E["AI 归纳、对比、给出结论"]
+```
 
 | 数据类别 | 代表能力 |
 | --- | --- |
@@ -118,7 +153,7 @@ AI 调用 `citongshuo_data_score`（args：`sh600519 --date 2026-09-30`）返回
 
 > 你问 AI："最近机构在龙虎榜上买了什么？"
 
-AI 调用 `citongshuo_data_lhb`（args：`--type institution --date 2026-09-30`）返回当日机构榜共 32 只，机构买入前列包括：
+AI 调用 `citongshuo_data_lhb`（args：`--type institution --date 2026-09-30`）返回当日机构榜，机构买入居前的个股包括：
 
 | 代码 | 名称 | 机构买入额 | 净买入额 |
 | --- | --- | --- | --- |
@@ -156,11 +191,23 @@ AI 调用 `citongshuo_data_market_overview`（args：`--type trade`）返回：
 
 ## 六、为什么值得用？三个别人替代不了的理由
 
+这套数据能力的含金量，其实早有旁证：社群打造的多智能体投研系统「刺桐说Pro」已入驻腾讯应用宝 AI 专区，并在「宝器智造局」大赛中拿下最佳工具奖（详见[入驻回顾](/2025/11/08/citongshuo-pro-tencent-ai-zone/)、[获奖回顾](/2025/12/12/citongshuo-pro-best-tool-award/)）。今天上线的连接器，就是把这类数据能力开放给你手边的每一个 AI 客户端。
+
 1. **数据是真的、是新的。** 每一项都来自生产级数据源，AI 返回的是可引用、可核对的原始数据，而不是"记忆里的印象"。
 2. **工具是"给 AI 用"的。** 35 个工具覆盖从行情到风险的全链路，AI 可以自动组合调用，完成一次完整分析——比如"先看板块轮动 → 再筛个股筹码 → 最后查机构评级"。
 3. **这是会员专属能力。** 它不是公开的数据接口，只有持有刺桐说会员密钥的人才能连上。数据有门槛，判断才有优势。
 
-## 七、如何拿到会员密钥？
+## 七、使用前的几点说明
+
+- **全部工具都是只读查询**：35 个工具只做数据查询，不涉及任何账户、交易或修改操作，可以放心调用；
+- **数据范围与节奏**：行情、资金类数据按交易日更新；分钟 K 线仅支持 A 股且限近 1 个月；筹码、龙虎榜、板块、评分等部分工具仅覆盖 A 股；
+- **密钥安全**：会员密钥仅限本人使用，请勿外传，也不要把含密钥的配置提交到公开仓库；
+- 使用中遇到问题或有数据需求，欢迎在社群里反馈，我们会持续迭代。
+
+> 以上为当前版本的已知边界，后续会随版本更新调整。
+{: .ct-callout .ct-callout-info }
+
+## 八、如何拿到会员密钥？
 
 「刺桐说金融数据」是刺桐说社群为会员提供的专属权益：
 
@@ -168,8 +215,11 @@ AI 调用 `citongshuo_data_market_overview`（args：`--type trade`）返回：
 2. 订阅**刺桐说社群会员**；
 3. 获取会员密钥后，按上文步骤安装连接器或配置客户端即可。
 
-如果你已经在使用「刺桐说Pro」专家团，那么这套数据能力正是它背后的同一套底座——**现在，你可以把它接进自己的 AI 工作流了。**
+- 👉 [**加入社群**](/about/)：了解社群文化，扫码获取邀请码；
+- 👉 [**会员服务**](/membership/)：查看会员权益，扫码订阅会员年卡。
 
-会员权益与订阅方式，详见 [www.citongshuo.online](https://www.citongshuo.online)，或直接在社群里咨询。
+![扫码订阅刺桐说会员年卡](/img/citongshuo-membership-card.jpg)
+
+期待在社群里，看到你用这套数据能力做出的精彩分析。
 
 免责声明：本文仅为市场分析，基于公开信息整理，不构成任何投资建议。作者未持有证券投资咨询资格，相关内容仅供参考。投资有风险，入市需谨慎！
