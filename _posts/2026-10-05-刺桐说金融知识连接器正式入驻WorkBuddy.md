@@ -228,6 +228,6 @@ curl -X POST https://knowledge.citongshuo.online/mcp \
 
 订阅会员后即可获取会员密钥，在 WorkBuddy 或任意 MCP 客户端中一键接入。期待在社群里，看到你的精彩输出与贡献。
 
-**配套阅读**：[《重磅！刺桐说金融数据 MCP 连接器正式入驻 WorkBuddy》](/2026/10/05/citongshuo-data-mcp-workbuddy/)
+**配套阅读**：[《「刺桐说金融数据」连接器正式入驻 WorkBuddy》](/2026/10/05/citongshuo-data-mcp-workbuddy/)
 
 免责声明：本文仅为市场分析，基于公开信息整理，不构成任何投资建议。作者未持有证券投资咨询资格，相关内容仅供参考。投资有风险，入市需谨慎！

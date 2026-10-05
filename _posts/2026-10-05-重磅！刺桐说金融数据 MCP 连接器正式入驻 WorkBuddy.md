@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "重磅！刺桐说金融数据 MCP 连接器正式入驻 WorkBuddy"
+title: "「刺桐说金融数据」连接器正式入驻 WorkBuddy"
 subtitle: "会员在 WorkBuddy 通过「连接器」一键安装，AI 直接调取 35 个金融数据工具；Claude Desktop、Cursor、Trae 等客户端也能一行配置接入。"
 author: "二哥聊指数"
 date: 2026-10-05 09:00:00
