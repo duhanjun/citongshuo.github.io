@@ -224,10 +224,7 @@ curl -X POST https://knowledge.citongshuo.online/mcp \
 - 让 AI 帮你读完研报、给出要点与对比；
 - 和一群来自券商、基金、期货、银行的专业投资者同频交流；
 
-那么，欢迎加入刺桐说：
-
-- 👉 [**加入社群**](https://k.youshop10.com/WH46k8Qh)：获取社群邀请码，成为会员；
-- 👉 [**会员服务**](https://k.youshop10.com/FGUoVzrL)：了解会员权益与服务内容。
+那么，欢迎加入刺桐说：**访问[会员服务](/membership/)页面，查看会员服务介绍和订阅方式。**
 
 订阅会员后即可获取会员密钥，在 WorkBuddy 或任意 MCP 客户端中一键接入。期待在社群里，看到你的精彩输出与贡献。
 

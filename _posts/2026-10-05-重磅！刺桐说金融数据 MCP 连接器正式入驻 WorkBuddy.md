@@ -215,8 +215,7 @@ AI 调用 `citongshuo_data_market_overview`（args：`--type trade`）返回：
 2. 订阅**刺桐说社群会员**；
 3. 获取会员密钥后，按上文步骤安装连接器或配置客户端即可。
 
-- 👉 [**加入社群**](/about/)：了解社群文化，扫码获取邀请码；
-- 👉 [**会员服务**](/membership/)：查看会员权益，扫码订阅会员年卡。
+**访问[会员服务](/membership/)页面，查看会员服务介绍和订阅方式。**
 
 ![扫码订阅刺桐说会员年卡](/img/citongshuo-membership-card.jpg)
 
