@@ -22,7 +22,7 @@
         </div>
     </a>
     <p class="post-meta">
-        Posted by {% if include.post.author %}{{ include.post.author }}{% else %}{{ site.title }}{% endif %} on {{ include.post.date | date: "%B %-d, %Y" }}
+        {% if include.post.author %}{{ include.post.author }}{% else %}{{ site.title }}{% endif %} 发布于 {{ include.post.date | date: "%Y年%-m月%-d日" }}
     </p>
 </div>
 <hr>
