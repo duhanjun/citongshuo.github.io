@@ -11,10 +11,12 @@
 
 **问题总量：20 条。** P0 2 条，P1 9 条，P2 9 条。
 
+> 实施修正（2026-11-03）：P1-1 原“删除零宽空格预处理”的判断被真实站点 UI 实测推翻，最终实现改为“保留正文分词对齐 + 跳过标题/代码 + 渲染后清理 ZWSP”，详见文末“实施修正记录”。
+
 **最该先动的 3 件事：**
 
 1. **先止血**：把 `2026-11-03/`（审计文档与 `work/` 中间产物）排除出 Jekyll 构建与自动提交范围；同时给发布脚本加“干净工作区 + 当前分支 + 目标目录”预检。否则下一次发布会把这份含内部风险清单的文档公开到站点上。
-2. **让构建可复现**：锁定 Ruby/Node/Pagefind 版本，补 `Gemfile.lock` 的 Linux 平台，建立 CI 构建门禁；同时删除 Pagefind 的零宽空格预处理——实测原生 Pagefind 1.5.2/1.6.0 已经能正确返回“估值/赛道”，预处理反而把 ZWSP 写进了搜索标题元数据。
+2. **让构建可复现**：锁定 Ruby/Node/Pagefind 版本，补 `Gemfile.lock` 的 Linux 平台，建立 CI 构建门禁；Pagefind 中文分词对齐需保留（真实站点 UI 下原生索引“估值”1/“赛道”0），但脚本要跳过 head/title/code 并在 UI 渲染后移除 ZWSP，实测修正后 5/4 且结果无 ZWSP。
 3. **再提性能与发布可信度**：关闭逐页 Terser（Jekyll 构建生成阶段 42.9–62.2s → 5.4s，墙钟 47–78s → 10.5s），把 Pagefind UI 改为点击搜索时加载，处理首屏大图与全站缺失的 `h1`；发布脚本对 Pagefind 失败由“静默继续”改为硬失败。
 
 ### 0.1 实测基线（本次评估的实际数据）
@@ -32,10 +34,11 @@
 | 首页头图 | 289 KB，1920×1280 | 无 srcset/preload |
 | 正文大图 | 286–421 KB；封面 3500×2333 | 无 WebP/AVIF、无响应式变体 |
 | 首页/归档/标签/关于/404 的 `h1` 数 | 0 | 仅文章页有 `h1` |
-| 原生 Pagefind 1.5.2 搜索 | “估值”5 条、“赛道”4 条 | 未做零宽空格预处理 |
-| 原生 Pagefind 1.6.0 搜索 | “估值”5 条、“赛道”4 条 | 同上 |
-| 本项目零宽空格版 1.6.0 | “估值”5 条、“赛道”5 条 | 索引词数 2562，原生 1.6.0 为 7106 |
-| 版本 | Pagefind 1.5.2（线上索引）/ npx 1.6.0；jQuery 2.1.3；Bootstrap 3.3.2；Ruby 3.4.9（mise 声明 3.3.8） | 见各问题证据 |
+| 原生 Pagefind 1.5.2 搜索 | Playground 5/4；真实站点 UI 1/0 | 未做零宽空格预处理 |
+| 原生 Pagefind 1.6.0 搜索 | Playground 5/4；真实站点 UI 1/0 | 同上 |
+| 旧零宽空格版 1.6.0 | 真实站点 UI 5/4 | 索引词数 2562，原生 1.6.0 为 7106；标题含 ZWSP |
+| 修正后零宽空格版（实施） | 真实站点 UI 5/4，结果无 ZWSP | 跳过 head/title/code/h1-meta，并在 UI 渲染后清理 |
+| 版本（实施前） | Pagefind 1.5.2（线上索引）/ npx 1.6.0；jQuery 2.1.3；Bootstrap 3.3.2；Ruby 3.4.9（mise 声明 3.3.8） | 见各问题证据 |
 | 时间戳 | 文章 front matter `09:00:00`，feed 输出 `17:00:00+08:00` | 差 8 小时 |
 
 ---
@@ -89,20 +92,20 @@
 
 ### P1（明显影响体验、性能或维护成本）
 
-#### P1-1 Pagefind 零宽空格预处理：前提不成立，且污染搜索标题
+#### P1-1 Pagefind 中文分词：预处理必要，但旧实现污染搜索标题（实施时已修正原判断）
 
-- **问题**：构建脚本先用 Node `Intl.Segmenter` 对 HTML 文本插入 U+200B，再建索引，理由是“Pagefind 索引侧 Rust 分词与浏览器查询侧 ICU 分词粒度不一致”。但 Pagefind 的 extended 版本在索引和浏览器查询两侧都使用自身的 CJK 分词；`npx pagefind` 默认就是 extended。该预处理是多余的，而且把 ZWSP 写进了 `<title>` 和 `h1[data-pagefind-meta="title"]`。
+- **问题**：旧构建脚本先用 Node `Intl.Segmenter` 对 HTML 文本插入 U+200B，再建索引；原审计基于 Pagefind Playground 测试，误判为该预处理多余。实施阶段用**真实站点 UI** 复测发现：原生 Pagefind 1.5.2/1.6.0 索引下“估值”仅 1 条、“赛道”0 条；旧 ZWSP 索引下为 5/4。也就是说，预处理是生产 UI 召回所必需的；真正的问题是旧脚本把 ZWSP 写进了 `<title>`、`h1` 标题元数据和代码块。
 - **证据**：
-  - `scripts/segment-cjk-for-pagefind.mjs:29-52`：对所有文本节点（含 `<title>`，且未排除 `<pre>/<code>`）插入 ZWSP；`:82-90` 复制全部 HTML 到 `.jekyll-cache/pagefind-src`。
-  - 分段后的源码中，文章 h1 有 4 个 ZWSP、`<title>` 有 11 个，例如 `「刺桐​说​金融AI知识​库」正式​上线`（命令输出，`[char]0x200B` 计数）。
-  - Pagefind 官方文档：`npx pagefind` 总是 extended 版本，包含中文/日文专用支持；索引与查询都会对无空格文本做分词：[Pagefind Multilingual](https://pagefind.app/docs/multilingual/)、[Pagefind Installation](https://pagefind.app/docs/installation/)。
-  - 实测：原生 Pagefind 1.5.2 对“估值/赛道”返回 5/4 条；原生 1.6.0 同样 5/4；本项目 ZWSP 版 1.6.0 返回 5/5。原生命令行输出词数 2396（1.5.2）、7106（1.6.0），ZWSP 版 2562。
-  - 第三方实践记录也描述过同一误区：把索引强行切成单字，而查询侧仍走 Pagefind 分词，导致多字查询落空：[One Human + a Fleet of Agents](https://hub.cissychen.com/blog-pipeline.en.html)（第三方博客，非官方文档）。
-- **同类做法与来源**：Pagefind 官方明确 extended 版本原生支持中文分词，且查询侧同样分词，正确做法是依赖官方分词而不是改写 HTML：[Pagefind Multilingual](https://pagefind.app/docs/multilingual/)、[Pagefind Installation](https://pagefind.app/docs/installation/)。第三方经验记录（见上）可作为旁证，但非权威来源。
-- **影响**：搜索结果标题带不可见字符（复制、分享、后续处理可能出现异常）；索引词数与分词粒度被改变，可能引入误召回（“赛道”从 4 条变 5 条）；多一个 Node 预处理步骤与 28 个 HTML 的临时复制，增加发布失败面；维护者会误以为“中文必须预处理”。
-- **建议改动**：删除 `build-deploy.ps1` 中的预处理调用，直接 `pagefind --site _site`；删除 `scripts/segment-cjk-for-pagefind.mjs`。通过 `package.json` 固定 `pagefind@1.5.2`（或先 A/B 后再升 1.6.x）。保留 `search.json` 作为无 Pagefind 时的回退。
-- **风险与验证**：风险可控，但必须做查询回归。验证：构建后 `pagefind-entry.json` 的 `page_count` 为 10；用 20 个词（估值、赛道、知识库、游资、财报、MCP…）对照原生索引结果；搜索结果标题无 ZWSP（可用 Node 检查 `\u200B`）；首页不出现搜索索引构建错误。
-- **工作量**：0.5 人日。
+  - 原脚本 `scripts/segment-cjk-for-pagefind.mjs` 对所有文本节点（含 `<title>`、未排除 `<pre>/<code>`）插入 ZWSP；旧版分段源码中文章 h1 有 4 个 ZWSP、`<title>` 有 11 个。
+  - 真实站点 UI（非 Playground）复测：原生 1.5.2 → 估值 1 / 赛道 0；原生 1.6.0 → 1 / 0；旧 ZWSP 索引 → 5 / 4。
+  - Playground 对同一索引返回 5/4，说明 Playground 的搜索行为不能代表生产 `PagefindUI`；原审计 P1-1 的“删除即可”结论被该实测推翻。
+  - 修正后的脚本跳过 `<head>`（含 `<title>`）、`<pre>/<code>`、带 `data-pagefind-meta="title"` 的 h1；实测真实站点 UI 仍为 5/4，且 `#pagefind-search` 渲染文本不含 U+200B。
+  - Pagefind 官方 extended 版本支持中文分词：[Pagefind Multilingual](https://pagefind.app/docs/multilingual/)；但本站在生产 UI 的实际查询侧未达到同样粒度，需保留索引侧对齐。
+- **同类做法与来源**：索引/查询分词不一致时，用零宽空格对齐是常见 workaround；代价是索引文本含不可见字符。修正做法是把 ZWSP 限制在正文索引，并在渲染层清除可见结果中的 ZWSP。Playground 只能作为索引导航，不能替代生产 UI 验收。
+- **影响**：若直接删除预处理，搜索“估值/赛道”等中文词召回从 5/4 降到 1/0；若保留旧脚本，则标题/摘要复制会带不可见字符。修正后两者兼顾。
+- **建议改动**（已实施）：保留 `scripts/segment-cjk-for-pagefind.mjs`，但跳过 `head/title/pre/code/h1-meta`；`build-deploy.ps1` 先分词再 `pagefind --output-path _site/pagefind`，失败硬中止；`footer.html` 在 Pagefind UI 渲染后从结果文本移除 U+200B。
+- **风险与验证**：真实站点 UI 估值 5 / 赛道 4；搜索结果标题及 `#pagefind-search` 文本无 ZWSP；`pagefind-entry.json` page_count=10；Pagefind 固定 1.5.2。
+- **工作量**：0.5 人日（已完成）。
 
 #### P1-2 生产构建 42–62 秒，约 90% 时间耗在逐页 Terser
 
@@ -397,7 +400,7 @@
 | 完整发布（含 Pagefind） | Jekyll 47–78s + Pagefind 本地约 1s / npx 首次约 29s | ≤30s（本地 Pagefind 二进制） | 构建脚本计时 |
 | 审计/配置泄露 | `_site/2026-11-03`、`_site/esa.jsonc` 存在 | 两者均不存在 | 临时构建 `Test-Path`；线上 URL 404 |
 | Pagefind 索引 | 38KB / 10 页 / 含 ZWSP | ≤50KB / 10 页 / 标题无 `\u200B` | `pagefind-entry.json` + Node 扫描 |
-| 搜索回归 | 估值 5、赛道 4（原生 1.5.2） | 与原生 1.5.2 一致 | 本地 playground 查询 20 个词 |
+| 搜索回归 | 修正后真实站点 UI 估值 5、赛道 4，结果无 ZWSP | 与修正版基线一致 | 本地站点 UI 查询 20 个词 + Node 扫描 |
 | 首屏 Pagefind 请求 | 每页加载 120KB UI | 0 次，点击搜索后才加载 | 浏览器 Network |
 | 首屏 CSS/JS | CSS 160KB + JS 131KB | CSS ≤160KB、JS ≤100KB（移除 Bootstrap JS） | 构建产物统计 |
 | 首屏图片 | 头图 289KB | ≤80KB（WebP + 多尺寸） | Lighthouse/人工检查 |
@@ -446,3 +449,11 @@
 - Bootstrap 漏洞：[CVE-2019-8331](https://nvd.nist.gov/vuln/detail/CVE-2019-8331)
 
 > 说明：ESA 免费套餐“构建失败无主动通知”未找到官方明确说明，本条来自本项目脚本注释与运行经验，属于“未找到可靠来源，基于通用实践/项目经验”的判断；其余结论均有上述文档或本次实测命令支撑。
+
+## 6. 实施修正记录（2026-11-03）
+
+- **P1-1 修正**：真实站点 UI 下原生 Pagefind 1.5.2/1.6.0 索引“估值”1 条、“赛道”0 条；旧 ZWSP 索引 5/4。原“删除预处理”结论被推翻，最终保留正文分词对齐，但跳过 `head/title/pre/code/h1-meta`，并在 Pagefind UI 渲染后清理可见 ZWSP。实测 5/4 且结果无 ZWSP。
+- **P2-9 修正**：原方案的“生产/预发 + 最近 3 个版本”会超出免费版 5 个版本（2 环境 + 3 历史 + 本次构建 = 6）。实施保留“生产/预发 + 最近 2 个”，并在脚本中写明原因。
+- **P2-8 已实施**：归档页移除初始 `d-none`，无 JS 时文章列表仍可见；标签筛选仍由 `archive.js` 处理。
+- **已实施**：jQuery 3.7.1 / Bootstrap 3.4.1 升级；Font Awesome 4.7 自托管；Mermaid 固定版本 + SRI；SW 版本化 cache、旧缓存清理、离线回退；文章时间戳统一 `+0800`；导航 `aria-expanded`/搜索 `aria-label`。
+- **未实施**：Lighthouse 实机跑分（环境无 Chrome/Edge；用构建耗时、HTML 体积、图片字节数、Pagefind 请求数、h1 数量作为等效指标）；Bootstrap JS 移除（回归风险高，保留并仅升级版本）；Anchor.js/ MathJax CDN 自托管（当前未启用 MathJax，Anchor.js 仅低风险 CDN，留待后续）；i18n 硬编码文案、灯箱焦点管理、Mermaid 索引忽略等纯 P2 体验项留待下一轮。

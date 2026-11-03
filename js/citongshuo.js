@@ -38,6 +38,7 @@
       meta.setAttribute("content", resolved === "dark" ? "#1b1b1d" : meta.dataset.ctLight);
     }
     updateToggle(pref, resolved);
+    document.dispatchEvent(new CustomEvent("ct-theme-changed", { detail: { theme: resolved } }));
   }
 
   function initTheme() {

@@ -116,15 +116,6 @@
 <script src='{{ "/js/archive.js " | prepend: site.baseurl }}'></script>
 {% endif %}
 
-<!--fastClick.js -->
-<script>
-    async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function () {
-        var $nav = document.querySelector("nav");
-        if ($nav) FastClick.attach($nav);
-    })
-</script>
-
-
 <!-- Google Analytics -->
 {% if site.ga_track_id %}
 <script>
@@ -180,8 +171,10 @@
 
         // appending
         a.each(function () {
+            var id = $(this).prop('id');
+            if (!id) { return; }
             n = $(this).prop('tagName').toLowerCase();
-            i = "#" + $(this).prop('id');
+            i = "#" + id;
             t = $(this).text();
             c = $('<a href="' + i + '" rel="nofollow">' + t + '</a>');
             l = $('<li class="' + n + '_nav"></li>').append(c);

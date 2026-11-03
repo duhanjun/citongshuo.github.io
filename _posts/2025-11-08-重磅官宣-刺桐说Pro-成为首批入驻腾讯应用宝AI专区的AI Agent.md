@@ -3,7 +3,7 @@ layout: post
 title: "重磅官宣！「刺桐说Pro」成为首批入驻腾讯应用宝AI专区的AI Agent"
 subtitle: "刺桐说Pro入驻应用宝"
 author: "二哥聊指数"
-date: 2025-11-08 09:00:00
+date: 2025-11-08 09:00:00 +0800
 slug: "citongshuo-pro-tencent-ai-zone"
 redirect_from: "/2025/11/08/zhong-bang-guan-xuan-ci-tong-shuo-pro-cheng-wei-shou-pi-ru-zhu-teng-xun-ying-yong-bao-ai-zhuan-qu-de-aiagent/"
 header-bg-css: "#060608"

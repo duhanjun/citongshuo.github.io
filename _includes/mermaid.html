@@ -24,11 +24,18 @@
         Array.prototype.forEach.call(codes, function (code) {
             var box = document.createElement("div");
             box.className = "mermaid";
+            box.dataset.ctSource = code.textContent;
             box.textContent = code.textContent;
             var target = code.closest(".highlight") || code.closest("pre");
             target.parentNode.replaceChild(box, target);
         });
         var nodes = document.querySelectorAll(".post-container .mermaid");
+        Array.prototype.forEach.call(nodes, function (box) {
+            if (box.dataset.ctSource) {
+                box.textContent = box.dataset.ctSource;
+                box.removeAttribute("data-processed");
+            }
+        });
         if (nodes.length) window.mermaid.run({ nodes: nodes });
     }
 
@@ -36,11 +43,14 @@
         if (idx >= CDNS.length) return;
         var s = document.createElement("script");
         s.src = CDNS[idx++];
+        s.integrity = "sha384-WmdflGW9aGfoBdHc4rRyWzYuAjEmDwMdGdiPNacbwfGKxBW/SO6guzuQ76qjnSlr";
+        s.crossOrigin = "anonymous";
         s.onload = render;
         s.onerror = load;
         document.head.appendChild(s);
     }
 
+    document.addEventListener("ct-theme-changed", render);
     load();
 })();
 </script>

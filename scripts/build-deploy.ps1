@@ -136,7 +136,7 @@ Write-Host "[3/6] 提交并推送源码到 main（不含产物）..." -Foregroun
 # 只暂存明确的源码/内容路径，避免 git add -A 把审计、临时文件或凭据带进提交。
 git add -u
 $sourcePaths = @(
-    "_posts", "_layouts", "_includes", "_data", "_plugins", "img", "js", "css", "pwa", "scripts", ".github",
+    "_posts", "_layouts", "_includes", "_data", "_plugins", "img", "js", "css", "pwa", "fonts", "scripts", ".github",
     "2026-11-03/code-audit/outputs", "package.json", "package-lock.json",
     "_config.yml", "Gemfile", "Gemfile.lock", "mise.toml", "sw.js", "search.json", "robots.txt", "ads.txt",
     "index.html", "about.html", "archive.html", "tags.html", "404.html", "offline.html", "esa.jsonc"

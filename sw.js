@@ -1,3 +1,7 @@
+---
+layout: null
+permalink: /sw.js
+---
 /* ===========================================================
  * sw.js
  * ===========================================================
@@ -10,8 +14,10 @@
 // CacheStorage is shared between all sites under same domain.
 // A namespace can prevent potential name conflicts and mis-deletion.
 const CACHE_NAMESPACE = 'main-'
-
-const CACHE = CACHE_NAMESPACE + 'precache-then-runtime';
+// 每次构建生成新的版本号：发布后旧 cache 在 activate 阶段被删除，
+// 避免 CacheStorage 里的旧 CSS/JS 在新 HTML 下继续被 SWR 优先返回。
+const CACHE_VERSION = '{{ site.time | date: "%Y%m%d%H%M%S" }}';
+const CACHE = CACHE_NAMESPACE + 'precache-then-runtime-' + CACHE_VERSION;
 const PRECACHE_LIST = [
   "./",
   "./offline.html",
@@ -19,19 +25,19 @@ const PRECACHE_LIST = [
   "./js/bootstrap.min.js",
   "./js/hux-blog.min.js",
   "./js/snackbar.js",
+  "./js/citongshuo.js",
   "./img/icon_wechat.png",
   "./img/home-bg.jpg",
+  "./img/home-bg-1280.webp",
+  "./img/cover-community-1280.webp",
   "./css/hux-blog.min.css",
-  "./css/bootstrap.min.css"
-  // "//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css",
-  // "//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/fonts/fontawesome-webfont.woff2?v=4.6.3",
-  // "//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js"
+  "./css/bootstrap.min.css",
+  "./css/citongshuo.css",
+  "./css/font-awesome.min.css",
+  "./fonts/fontawesome-webfont.woff2"
 ]
 const HOSTNAME_WHITELIST = [
-  self.location.hostname,
-  "huangxuan.me",
-  "yanshuo.io",
-  "cdnjs.cloudflare.com"
+  self.location.hostname
 ]
 const DEPRECATED_CACHES = ['precache-v1', 'runtime', 'main-precache-v1', 'main-runtime']
 
@@ -39,7 +45,7 @@ const DEPRECATED_CACHES = ['precache-v1', 'runtime', 'main-precache-v1', 'main-r
 // The Util Function to hack URLs of intercepted requests
 const getCacheBustingUrl = (req) => {
   var now = Date.now();
-  url = new URL(req.url)
+  const url = new URL(req.url)
 
   // 1. fixed http URL
   // Just keep syncing with location.protocol
@@ -60,7 +66,10 @@ const getCacheBustingUrl = (req) => {
 // request.mode of 'navigate' is unfortunately not supported in Chrome
 // versions older than 49, so we need to include a less precise fallback,
 // which checks for a GET request with an Accept: text/html header.
-const isNavigationReq = (req) => (req.mode === 'navigate' || (req.method === 'GET' && req.headers.get('accept').includes('text/html')))
+const isNavigationReq = (req) => {
+  const accept = req.headers.get('accept') || ''
+  return req.mode === 'navigate' || (req.method === 'GET' && accept.includes('text/html'))
+}
 
 // The Util Function to detect if a req is end with extension
 // Accordin to Fetch API spec <https://fetch.spec.whatwg.org/#concept-request-destination>
@@ -83,7 +92,7 @@ const shouldRedirect = (req) => (isNavigationReq(req) && new URL(req.url).pathna
 // `${url}/` would mis-add "/" in the end of query, so we use URL object.
 // P.P.S. Always trust url.pathname instead of the whole url string.
 const getRedirectUrl = (req) => {
-  url = new URL(req.url)
+  const url = new URL(req.url)
   url.pathname += "/"
   return url.href
 }
@@ -100,9 +109,10 @@ const getRedirectUrl = (req) => {
 self.addEventListener('install', e => {
   e.waitUntil(
     caches.open(CACHE)
-      // addAll 是原子操作：清单里任一项拉取失败会整批回滚。但预缓存失败不该阻断
-      // SW 激活，所以这里只记录错误，skipWaiting() 无条件执行，其余资源仍由运行时按需缓存。
-      .then(cache => cache.addAll(PRECACHE_LIST).catch(err => console.log('precache failed:', err)))
+      // 逐项缓存：单个资源 404 不会让整批回滚；失败只记录，其余资源仍可离线使用。
+      .then(cache => Promise.all(PRECACHE_LIST.map(url =>
+        cache.add(url).catch(err => console.log('precache failed:', url, err))
+      )))
       .then(() => self.skipWaiting())
   )
 });
@@ -115,42 +125,19 @@ self.addEventListener('install', e => {
  *  waitUntil(): activating ====> activated
  */
 self.addEventListener('activate', event => {
-  // delete old deprecated caches.
-  caches.keys().then(cacheNames => Promise.all(
-    cacheNames
-      .filter(cacheName => DEPRECATED_CACHES.includes(cacheName))
-      .map(cacheName => caches.delete(cacheName))
-  ))
-  console.log('service worker activated.')
-  event.waitUntil(self.clients.claim());
+  // 删除旧版本 cache：所有 main- 前缀但非当前版本，以及历史遗留名称。
+  event.waitUntil(
+    caches.keys()
+      .then(cacheNames => Promise.all(
+        cacheNames
+          .filter(cacheName => (cacheName.startsWith(CACHE_NAMESPACE) && cacheName !== CACHE) ||
+            DEPRECATED_CACHES.includes(cacheName))
+          .map(cacheName => caches.delete(cacheName))
+      ))
+      .then(() => self.clients.claim())
+  )
+  console.log('service worker activated:', CACHE_VERSION)
 });
-
-
-var fetchHelper = {
-
-  fetchThenCache: function(request){
-    // Requests with mode "no-cors" can result in Opaque Response,
-    // Requests to Allow-Control-Cross-Origin: * can't include credentials.
-    const init = { mode: "cors", credentials: "omit" } 
-
-    const fetched = fetch(request, init)
-    const fetchedCopy = fetched.then(resp => resp.clone());
-
-    // NOTE: Opaque Responses have no hedaders so [[ok]] make no sense to them
-    //       so Opaque Resp will not be cached in this case.
-    Promise.all([fetchedCopy, caches.open(CACHE)])
-      .then(([response, cache]) => response.ok && cache.put(request, response))
-      .catch(_ => {/* eat any errors */})
-    
-    return fetched;
-  },
-
-  cacheFirst: function(url){
-    return caches.match(url) 
-      .then(resp => resp || this.fetchThenCache(url))
-      .catch(_ => {/* eat any errors */})
-  }
-}
 
 
 /**
@@ -165,18 +152,12 @@ self.addEventListener('fetch', event => {
   //console.log(` - type: ${event.request.type}; destination: ${event.request.destination}`)
   //console.log(` - mode: ${event.request.mode}, accept: ${event.request.headers.get('accept')}`)
 
-  // Skip some of cross-origin requests, like those for Google Analytics.
+  // 只拦截本站请求；外部 CDN 交给浏览器 HTTP 缓存。
   if (HOSTNAME_WHITELIST.indexOf(new URL(event.request.url).hostname) > -1) {
 
     // Redirect in SW manually fixed github pages 404s on repo?blah
     if (shouldRedirect(event.request)) {
       event.respondWith(Response.redirect(getRedirectUrl(event.request)))
-      return;
-    }
-
-    // Cache-only Startgies for ys.static resources
-    if (event.request.url.indexOf('ys.static') > -1){
-      event.respondWith(fetchHelper.cacheFirst(event.request.url))
       return;
     }
 
@@ -208,11 +189,10 @@ self.addEventListener('fetch', event => {
     // Stale-while-revalidate for the remaining static resources
     // similar to HTTP's stale-while-revalidate: https://www.mnot.net/blog/2007/12/12/stale
     // Upgrade from Jake's to Surma's: https://gist.github.com/surma/eb441223daaedf880801ad80006389f1
-    // 注意：静态资源不再追加 cache-bust 查询串——那会让边缘/CDN 缓存对每个时间戳都变成
-    // 未命中，等于绕过 CDN。这里改用 cache: "no-store" 让浏览器侧缓存失效并回源，同时
-    // 保持 URL 干净、享受边缘缓存。cache-bust 只保留给上面的 HTML 导航请求。
+    // 静态资源不再追加 cache-bust、也不再用 no-store：保留浏览器/边缘 HTTP 缓存，
+    // 发布失效交给版本化 cache（CACHE_VERSION）处理；cache-bust 只保留给 HTML 导航。
     const cached = caches.match(event.request);
-    const fetched = fetch(event.request, { cache: "no-store" });
+    const fetched = fetch(event.request);
     const fetchedCopy = fetched.then(resp => resp.clone());
     
     // Call respondWith() with whatever we get first.

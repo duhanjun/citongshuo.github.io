@@ -3,7 +3,7 @@ layout: post
 title: "私募总监的AI实验：用WorkBuddy制作投资大咖的数字分身"
 subtitle: "把投资老手塞进AI，构建24小时在线的多智能体投研系统。"
 author: "二哥聊指数"
-date: 2026-06-16 09:00:00
+date: 2026-06-16 09:00:00 +0800
 slug: "workbuddy-ai-expert-team"
 redirect_from: "/2026/10/02/si-mu-zong-jian-de-ai-shi-yan-yong-workbuddy-zhi-zuo-tou-zi-da-ka-de-shu-zi-fen-shen/"
 header-bg-css: "#060608"
