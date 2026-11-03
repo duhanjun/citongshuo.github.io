@@ -4,6 +4,7 @@
     <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <meta name="description" content="{{ page.description | default: site.description }}">
+    {% if page.noindex %}<meta name="robots" content="noindex">{% endif %}
     <meta name="keywords" content="{{ site.keyword }}">
     <meta name="theme-color" content="{{ site.chrome-tab-theme-color }}">
 
@@ -57,6 +58,7 @@
 
     <!-- Structured Data (JSON-LD) -->
     {% if page.layout == 'post' %}
+    {% assign ct_date_modified = page.last_modified_at | default: page.date %}
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -66,6 +68,7 @@
       "image": {{ og_image | jsonify }},
       "keywords": {{ page.tags | join: ', ' | jsonify }},
       "datePublished": {{ page.date | date_to_xmlschema | jsonify }},
+      "dateModified": {{ ct_date_modified | date_to_xmlschema | jsonify }},
       "author": { "@type": "Person", "name": {{ page.author | default: site.title | jsonify }} },
       "publisher": {
         "@type": "Organization",
@@ -103,6 +106,13 @@
 
     <!-- Web App Manifest -->
     <link rel="manifest" href="{{ site.baseurl }}/pwa/manifest.json">
+
+    <!-- 首屏头图预加载（仅首页/关于页等显式提供 WebP 变体的页面） -->
+    {% if page.header-img-webp-1x %}
+    <link rel="preload" as="image" href="{{ site.baseurl }}/{{ page.header-img-webp-1x }}"
+        imagesrcset="{{ site.baseurl }}/{{ page.header-img-webp-1x }} 1x, {{ site.baseurl }}/{{ page.header-img-webp-2x }} 2x"
+        fetchpriority="high">
+    {% endif %}
 
     <!-- Favicon -->
     <link rel="shortcut icon" href="{{ site.baseurl }}/img/favicon.ico">

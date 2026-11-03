@@ -3,11 +3,16 @@
     @param {boolean} short
 {% endcomment %}
 
+{%- assign ct_header_img = page.header-img | default: site.header-img -%}
+
 {% if include.type == 'post' or include.type == 'page' %}
 <style type="text/css">
     header.intro-header{
         position: relative;
-        background-image: url('{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}');
+        {% if ct_header_img %}background-image: url('{{ site.baseurl }}/{{ ct_header_img }}');{% endif %}
+        {% if page.header-img-webp-1x %}
+        background-image: image-set(url('{{ site.baseurl }}/{{ page.header-img-webp-1x }}') 1x, url('{{ site.baseurl }}/{{ page.header-img-webp-2x }}') 2x);
+        {% endif %}
         {% if page.header-bg-css %}background: {{ page.header-bg-css }};{% endif %}
     }
 
@@ -94,7 +99,7 @@
 {% endif %}
 
 {% if include.type == 'page' %}
-<header class="intro-header" style="background-image: url('{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}');{% if page.header-bg-css %}background: {{ page.header-bg-css }};{% endif %}">
+<header class="intro-header" style="{% if ct_header_img %}background-image: url('{{ site.baseurl }}/{{ ct_header_img }}');{% endif %}{% if page.header-img-webp-1x %}background-image: image-set(url('{{ site.baseurl }}/{{ page.header-img-webp-1x }}') 1x, url('{{ site.baseurl }}/{{ page.header-img-webp-2x }}') 2x);{% endif %}{% if page.header-bg-css %}background: {{ page.header-bg-css }};{% endif %}">
   <div class="header-mask"></div>
   <div class="container">
     <div class="row">
@@ -104,7 +109,8 @@
         {% else %}
         <div class="site-heading">
         {% endif %}
-          <!-- <h1>{% if page.title %}{{ page.title }}{% else %}{{ site.title }}{% endif %}</h1> -->
+          <!-- 每页保留一个主标题；视觉上隐藏，供 SEO 与屏幕阅读器使用 -->
+          <h1 class="sr-only">{% if page.title %}{{ page.title }}{% else %}{{ site.title }}{% endif %}</h1>
           {% unless page.hide-header-text %}{% if page.description %}<span class="subheading">{{ page.description }}</span>{% endif %}{% endunless %}
         </div>
       </div>

@@ -164,7 +164,8 @@
 {% endif %}
 
 
-<!-- Side Catalog -->
+<!-- Side Catalog：仅文章页需要，避免首页/关于/归档加载 jquery.nav.js -->
+{% if page.layout == 'post' %}
 {% unless page.no-catalog %}
 <script type="text/javascript">
     function generateCatalog(selector) {
@@ -218,6 +219,7 @@
     });
 </script>
 {% endunless %}
+{% endif %}
 
 
 <!-- Search：优先 Pagefind 全文搜索，产物缺失时回退到 simple-jekyll-search 元数据搜索 -->
@@ -230,7 +232,7 @@
         if (legacyBox) { legacyBox.hidden = false; }
 
         var script = document.createElement('script');
-        script.src = '{{ "/js/simple-jekyll-search.min.js" | prepend: site.baseurl }}';
+        script.src = '{{ "/js/simple-jekyll-search.min.js" | relative_url }}';
         script.onload = function () {
             // https://stackoverflow.com/questions/1912501/unescape-html-entities-in-javascript
             function htmlDecode(input) {
@@ -243,7 +245,7 @@
             SimpleJekyllSearch({
                 searchInput: document.getElementById('search-input'),
                 resultsContainer: document.getElementById('search-results'),
-                json: '/search.json',
+                json: '{{ "/search.json" | relative_url }}',
                 searchResultTemplate: '<div class="post-preview item"><a href="{url}"><h2 class="post-title">{title}</h2><h3 class="post-subtitle">{subtitle}</h3><hr></a></div>',
                 noResultsText: 'No results',
                 limit: 50,
@@ -264,58 +266,82 @@
         document.body.appendChild(script);
     }
 
-    // 特性探测：Pagefind 产物存在则用全文搜索，否则加载失败回退
-    (function () {
+    // 按需加载：只有用户第一次打开搜索时才拉 Pagefind UI/索引，避免每页承担 120KB 脚本。
+    var ctSearchLoading = false;
+    var ctSearchReady = false;
+    function loadSearch() {
+        if (ctSearchLoading || ctSearchReady) { return; }
+        ctSearchLoading = true;
+
         var script = document.createElement('script');
-        script.src = '{{ "/pagefind/pagefind-ui.js" | prepend: site.baseurl }}';
+        script.src = '{{ "/pagefind/pagefind-ui.js" | relative_url }}';
         script.onload = function () {
             var link = document.createElement('link');
             link.rel = 'stylesheet';
-            link.href = '{{ "/pagefind/pagefind-ui.css" | prepend: site.baseurl }}';
+            link.href = '{{ "/pagefind/pagefind-ui.css" | relative_url }}';
             document.head.appendChild(link);
 
-            new PagefindUI({
-                element: '#pagefind-search',
-                showSubResults: true,
-                showImages: false,
-                translations: {
-                    placeholder: '输入关键词...',
-                    zero_results: '未找到与 [SEARCH_TERM] 相关的内容',
-                    one_result: '找到 [COUNT] 篇相关文章',
-                    many_results: '找到 [COUNT] 篇相关文章',
-                    searching: '搜索中...',
-                    load_more: '加载更多',
-                    clear_search: '清除'
-                }
-            });
+            try {
+                new PagefindUI({
+                    element: '#pagefind-search',
+                    showSubResults: true,
+                    showImages: false,
+                    translations: {
+                        placeholder: '输入关键词...',
+                        zero_results: '未找到与 [SEARCH_TERM] 相关的内容',
+                        one_result: '找到 [COUNT] 篇相关文章',
+                        many_results: '找到 [COUNT] 篇相关文章',
+                        searching: '搜索中...',
+                        load_more: '加载更多',
+                        clear_search: '清除'
+                    }
+                });
+                ctSearchReady = true;
+            } catch (e) {
+                initLegacySearch();
+            }
+            ctSearchLoading = false;
         };
-        script.onerror = initLegacySearch;
+        script.onerror = function () {
+            ctSearchLoading = false;
+            initLegacySearch();
+        };
         document.body.appendChild(script);
-    })();
+    }
 
     $(document).ready(function () {
         var $searchPage = $('.search-page');
         var $searchOpen = $('.search-icon');
         var $searchClose = $('.search-icon-close');
         var $body = $('body');
+        var ctPrevBodyClasses = null;
+
+        function focusSearchInput() {
+            var $input = $('#pagefind-search input, #legacy-search input').filter(':visible').first();
+            if ($input.length) { $input.focus(); }
+        }
 
         $searchOpen.on('click', function (e) {
             e.preventDefault();
+            var opening = !$searchPage.hasClass('search-active');
             $searchPage.toggleClass('search-active');
-            var prevClasses = $body.attr('class') || '';
-            setTimeout(function () {
-                $body.addClass('no-scroll');
-            }, 400)
 
-            if ($searchPage.hasClass('search-active')) {
-                $searchClose.on('click', function (e) {
-                    e.preventDefault();
-                    $searchPage.removeClass('search-active');
-                    $body.attr('class', prevClasses);  // from closure 
-                });
-                // Pagefind UI 的输入框是异步渲染的，打开时按可见性动态定位
-                $('#pagefind-search input, #legacy-search input').filter(':visible').first().focus();
+            if (opening) {
+                ctPrevBodyClasses = $body.attr('class') || '';
+                setTimeout(function () {
+                    $body.addClass('no-scroll');
+                }, 400);
+                loadSearch();
+                setTimeout(focusSearchInput, 500);
+            } else {
+                $body.attr('class', ctPrevBodyClasses || '');
             }
+        });
+
+        $searchClose.on('click', function (e) {
+            e.preventDefault();
+            $searchPage.removeClass('search-active');
+            $body.attr('class', ctPrevBodyClasses || '');
         });
     });
 </script>

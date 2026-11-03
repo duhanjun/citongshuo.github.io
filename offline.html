@@ -3,11 +3,24 @@ layout: default
 title: Offline
 hide-in-nav: true
 permalink: /offline.html
+sitemap: false
+noindex: true
+header-bg-css: "#060608"
 ---
 
 
 <!-- Page Header -->
 {% include intro-header.html type="page" %}
+
+<div class="container">
+	<div class="row">
+		<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 post-container">
+			<h2>当前处于离线状态</h2>
+			<p>网络暂不可用，已加载的页面仍可阅读。恢复网络后刷新即可获取最新内容。</p>
+			<p><a href="{{ '/' | relative_url }}">返回首页</a></p>
+		</div>
+	</div>
+</div>
 
 <script>
 	document.body.classList.add('page-fullscreen');
