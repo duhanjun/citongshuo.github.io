@@ -297,6 +297,25 @@
                     }
                 });
                 ctSearchReady = true;
+
+                // 索引正文为中文分词对齐插入了 U+200B；渲染后从可见文本移除，
+                // 避免搜索结果标题/摘要复制时带不可见字符（不影响索引与查询）。
+                var searchRoot = document.getElementById('pagefind-search');
+                var stripZwsp = function (root) {
+                    if (!root || !window.MutationObserver) { return; }
+                    var walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null);
+                    var node;
+                    while ((node = walker.nextNode())) {
+                        if (node.nodeValue.indexOf('\u200B') !== -1) {
+                            node.nodeValue = node.nodeValue.replace(/\u200B/g, '');
+                        }
+                    }
+                };
+                if (searchRoot) {
+                    stripZwsp(searchRoot);
+                    new MutationObserver(function () { stripZwsp(searchRoot); })
+                        .observe(searchRoot, { childList: true, subtree: true });
+                }
             } catch (e) {
                 initLegacySearch();
             }

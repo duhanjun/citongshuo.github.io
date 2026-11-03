@@ -101,13 +101,18 @@ if (-not (Test-Path "_site/sitemap.xml")) {
 Write-Host "  产物检查通过：无审计目录/esa.jsonc，核心文件存在。" -ForegroundColor DarkGray
 
 # 生成 Pagefind 全文搜索索引（产物落在 _site/pagefind）。
-# Pagefind 的 extended 版本原生支持中文分词，索引与查询两侧行为一致；
-# 这里不再对 HTML 插入零宽空格，直接索引构建产物。
+# 生产 UI 的查询侧不会按中文词边界切分「估值」「赛道」这类词，实测原生索引在
+# 真实站点 UI 中召回明显下降（估值 1 条、赛道 0 条）；因此保留零宽空格对齐，
+# 但脚本会跳过 <head>/<title>/<pre>/<code>/标题元数据，避免污染搜索结果标题。
 # 使用 package.json 固定的本地版本，避免 npx 拉到新版本导致索引格式漂移。
 Write-Host "  生成 Pagefind 全文索引..." -ForegroundColor DarkGray
-# 自定义 --output-path 时 Pagefind 不会清理旧索引，先删掉避免残留无用分片
+$pagefindSrc = ".jekyll-cache/pagefind-src"
 Remove-Item "_site/pagefind" -Recurse -Force -ErrorAction SilentlyContinue
-npx --no-install pagefind --site "_site"
+node scripts/segment-cjk-for-pagefind.mjs "_site" $pagefindSrc
+if ($LASTEXITCODE -ne 0) {
+    Fail "中文分词对齐失败，已中止（不能退回未分词索引，否则多字中文查询会退化）。"
+}
+npx --no-install pagefind --site $pagefindSrc --output-path "_site/pagefind"
 if ($LASTEXITCODE -ne 0) {
     Fail "Pagefind 索引生成失败，已中止（请检查 package.json 固定版本与 node_modules）。"
 }

@@ -40,7 +40,10 @@ jobs:
         run: bundle exec jekyll build
 
       - name: Build Pagefind index
-        run: npx --no-install pagefind --site _site
+        run: |
+          rm -rf _site/pagefind
+          node scripts/segment-cjk-for-pagefind.mjs _site .jekyll-cache/pagefind-src
+          npx --no-install pagefind --site .jekyll-cache/pagefind-src --output-path _site/pagefind
 
       - name: Assert build output
         run: |
