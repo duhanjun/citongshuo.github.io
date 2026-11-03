@@ -40,6 +40,10 @@ exclude:
     "mise.toml",
     "历史文章.zip",
     "scripts",
+    "esa.jsonc",
+    "package.json",
+    "package-lock.json",
+    "2026-11-03",
   ]
 anchorjs: true # if you want to customize anchor. check out line:181 of `post.html`
 # If you have timezone issue (e.g. #68) in China, uncomment to use this:
