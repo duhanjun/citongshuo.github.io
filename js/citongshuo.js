@@ -15,7 +15,7 @@
   }
 
   function updateToggle(pref, resolved) {
-    var btn = document.querySelector(".theme-toggle a");
+    var btn = document.querySelector(".theme-toggle button");
     if (!btn) return;
     var icon = btn.querySelector("i");
     var map = {
@@ -48,7 +48,7 @@
     } catch (e) {}
     applyTheme(pref || "system");
 
-    var btn = document.querySelector(".theme-toggle a");
+    var btn = document.querySelector(".theme-toggle button");
     if (btn) {
       btn.addEventListener("click", function (e) {
         e.preventDefault();

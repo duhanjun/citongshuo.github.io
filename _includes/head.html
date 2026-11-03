@@ -110,8 +110,8 @@
     <!-- 首屏头图预加载（仅首页/关于页等显式提供 WebP 变体的页面） -->
     {% if page.header-img-webp-1x %}
     <link rel="preload" as="image" href="{{ site.baseurl }}/{{ page.header-img-webp-1x }}"
-        imagesrcset="{{ site.baseurl }}/{{ page.header-img-webp-1x }} 1x, {{ site.baseurl }}/{{ page.header-img-webp-2x }} 2x"
-        fetchpriority="high">
+        imagesrcset="{{ site.baseurl }}/{{ page.header-img-webp-1x }} 1280w, {{ site.baseurl }}/{{ page.header-img-webp-2x }} 1920w"
+        imagesizes="100vw" fetchpriority="high">
     {% endif %}
 
     <!-- Favicon -->

@@ -10,7 +10,7 @@
   --ct-bg-elev: #f7f7f7;
   --ct-nav-bg: rgba(255, 255, 255, 0.9);
   --ct-text: #404040;
-  --ct-text-muted: #a3a3a3;
+  --ct-text-muted: #6b6b6b;
   --ct-border: #ececec;
   --ct-link: #337ab7;
   --ct-link-hover: #0085a1;
@@ -23,7 +23,7 @@ html[data-theme="dark"] {
   --ct-bg-elev: #26262a;
   --ct-nav-bg: rgba(27, 27, 29, 0.92);
   --ct-text: #c9c9cc;
-  --ct-text-muted: #8a8a8f;
+  --ct-text-muted: #9a9a9f;
   --ct-border: #3a3a3f;
   --ct-link: #6cb6e0;
   --ct-link-hover: #8fd0f0;
@@ -623,4 +623,96 @@ html[data-theme="dark"] .post-container .ct-callout-danger {
 .post-container .mermaid svg {
   max-width: 100%;
   height: auto;
+}
+
+/* ============================ 语义与可访问性修正 ============================ */
+/* 首页/关于页 hero 使用真实 img + srcset；图片置于 header 背景层，文字在上 */
+.ct-hero-img {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.intro-header .header-mask {
+  z-index: 1;
+}
+
+.intro-header .site-heading,
+.intro-header .post-heading {
+  position: relative;
+  z-index: 2;
+}
+
+/* 搜索入口/主题切换改为 button 后保持原有图标外观 */
+.search-icon .ct-search-trigger,
+#ct-tools .theme-toggle button {
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.search-icon .ct-search-trigger {
+  color: #311e3e;
+  font-size: 30px;
+  transition: all 0.25s;
+}
+
+.search-icon .ct-search-trigger:hover {
+  opacity: 0.8;
+}
+
+#ct-tools .theme-toggle button {
+  display: block;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: var(--ct-accent);
+  color: #fff;
+  font-size: 18px;
+  line-height: 42px;
+  text-align: center;
+  box-shadow: 0 2px 8px var(--ct-shadow);
+}
+
+#ct-tools .theme-toggle button:hover {
+  opacity: 0.85;
+  color: #fff;
+}
+
+html[data-theme="dark"] .search-icon .ct-search-trigger {
+  color: var(--ct-text);
+}
+
+/* hux-blog 的 #a3a3a3 低对比文本在浅色下提升到 AA（5.33:1 / 4.97:1）；
+   深色由 --ct-text-muted 统一覆盖 */
+.sidebar-container h5,
+.sidebar-container h5 a,
+.post-preview > .post-meta,
+.post-content-preview,
+.post-container .pager li > a > span {
+  color: #6b6b6b;
+}
+
+.sidebar-container h5 a {
+  color: #6b6b6b !important;
+}
+
+html[data-theme="dark"] .sidebar-container h5,
+html[data-theme="dark"] .sidebar-container h5 a,
+html[data-theme="dark"] .post-preview > .post-meta,
+html[data-theme="dark"] .post-content-preview,
+html[data-theme="dark"] .post-container .pager li > a > span {
+  color: var(--ct-text-muted) !important;
+}
+
+.ct-mermaid-fallback {
+  margin: 0.6em 0 0.2em;
+  color: var(--ct-text-muted);
+  font-size: 14px;
 }

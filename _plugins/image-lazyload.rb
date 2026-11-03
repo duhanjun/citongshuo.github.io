@@ -12,7 +12,8 @@ Jekyll::Hooks.register %i[documents pages], :post_render do |doc|
   image_index = 0
   doc.output = doc.output.gsub(/<img\s[^>]*>/i) do |tag|
     image_index += 1
-    next tag if tag =~ /\bloading\s*=/i
+    # 已有 loading/fetchpriority/decoding 的图片不再重复补属性（尤其是 hero 首图）
+    next tag if tag =~ /\bloading\s*=|\bfetchpriority\s*=|\bdecoding\s*=/i
 
     if image_index == 1
       tag.sub("<img", '<img fetchpriority="high" decoding="async"')

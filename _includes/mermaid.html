@@ -1,27 +1,62 @@
 {% comment %}
-    Mermaid 流程图（按需加载）
+    Mermaid 流程图（单源按需加载）
     用法：文章 front matter 设置 `mermaid: true`，正文用 ```mermaid 代码块书写。
-    脚本从 CDN 加载（国内优先 BootCDN，失败回退 jsDelivr），不增加未开启文章的负担。
+    固定从 jsDelivr 加载 10.9.1（带 SRI），不再保留 BootCDN 回退；
+    图表接近视口时才加载脚本，失败只影响图块并显示降级提示。
 {% endcomment %}
 <script>
 (function () {
-    var CDNS = [
-        "https://cdn.bootcdn.net/ajax/libs/mermaid/10.9.1/mermaid.min.js",
-        "https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.min.js"
-    ];
-    var idx = 0;
+    var SRC = "https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.min.js";
+    var SRI = "sha384-WmdflGW9aGfoBdHc4rRyWzYuAjEmDwMdGdiPNacbwfGKxBW/SO6guzuQ76qjnSlr";
+    var state = "idle"; // idle | loading | loaded | failed
+
+    function codeBlocks() {
+        return document.querySelectorAll(".post-container pre > code.language-mermaid");
+    }
+
+    function addFallbackNote(target, text) {
+        if (!target || !target.parentNode) return;
+        if (target.previousElementSibling && target.previousElementSibling.classList &&
+            target.previousElementSibling.classList.contains("ct-mermaid-fallback")) return;
+        var note = document.createElement("p");
+        note.className = "ct-mermaid-fallback";
+        note.textContent = text;
+        target.parentNode.insertBefore(note, target);
+    }
+
+    function showLoadFallback() {
+        state = "failed";
+        Array.prototype.forEach.call(codeBlocks(), function (code) {
+            var target = code.closest(".highlight") || code.closest("pre") || code;
+            addFallbackNote(target, "图表加载失败，以下保留图表源码，可复制查看。");
+        });
+    }
+
+    function showRenderFallback() {
+        // 脚本已加载但渲染失败：把已替换的容器恢复为源码，并给出提示。
+        Array.prototype.forEach.call(document.querySelectorAll(".post-container .mermaid"), function (box) {
+            if (!box.dataset.ctSource || !box.parentNode) return;
+            var pre = document.createElement("pre");
+            var code = document.createElement("code");
+            code.textContent = box.dataset.ctSource;
+            pre.appendChild(code);
+            box.parentNode.replaceChild(pre, box);
+            addFallbackNote(pre, "图表渲染失败，以下保留图表源码，可复制查看。");
+        });
+        state = "failed";
+    }
 
     function render() {
-        if (!window.mermaid) return;
+        if (!window.mermaid || state === "failed") return;
         var dark = document.documentElement.getAttribute("data-theme") === "dark";
         window.mermaid.initialize({
             startOnLoad: false,
             theme: dark ? "dark" : "default",
             securityLevel: "strict"
         });
+
         // 把 ```mermaid 代码块替换为 mermaid 容器（连同高亮外壳一起替换，避免残留空壳）
-        var codes = document.querySelectorAll(".post-container pre > code.language-mermaid");
-        Array.prototype.forEach.call(codes, function (code) {
+        Array.prototype.forEach.call(codeBlocks(), function (code) {
             var box = document.createElement("div");
             box.className = "mermaid";
             box.dataset.ctSource = code.textContent;
@@ -29,6 +64,7 @@
             var target = code.closest(".highlight") || code.closest("pre");
             target.parentNode.replaceChild(box, target);
         });
+
         var nodes = document.querySelectorAll(".post-container .mermaid");
         Array.prototype.forEach.call(nodes, function (box) {
             if (box.dataset.ctSource) {
@@ -36,21 +72,64 @@
                 box.removeAttribute("data-processed");
             }
         });
-        if (nodes.length) window.mermaid.run({ nodes: nodes });
+        if (!nodes.length) return;
+        try {
+            var running = window.mermaid.run({ nodes: nodes });
+            if (running && typeof running.catch === "function") {
+                running.catch(showRenderFallback);
+            }
+        } catch (e) {
+            showRenderFallback();
+        }
     }
 
     function load() {
-        if (idx >= CDNS.length) return;
+        if (state === "loading" || state === "loaded") return;
+        state = "loading";
         var s = document.createElement("script");
-        s.src = CDNS[idx++];
-        s.integrity = "sha384-WmdflGW9aGfoBdHc4rRyWzYuAjEmDwMdGdiPNacbwfGKxBW/SO6guzuQ76qjnSlr";
+        s.src = SRC;
+        s.integrity = SRI;
         s.crossOrigin = "anonymous";
-        s.onload = render;
-        s.onerror = load;
+        s.onload = function () {
+            state = "loaded";
+            render();
+        };
+        s.onerror = showLoadFallback;
         document.head.appendChild(s);
     }
 
-    document.addEventListener("ct-theme-changed", render);
-    load();
+    function init() {
+        if (state !== "idle") return;
+        var codes = codeBlocks();
+        if (!codes.length) return;
+
+        // 图表接近视口时再加载库，避免文章首屏承担 3MB+ 的脚本。
+        if (!("IntersectionObserver" in window)) {
+            load();
+            return;
+        }
+        var observer = new IntersectionObserver(function (entries) {
+            for (var i = 0; i < entries.length; i++) {
+                if (entries[i].isIntersecting) {
+                    observer.disconnect();
+                    load();
+                    return;
+                }
+            }
+        }, { rootMargin: "200px 0px" });
+        Array.prototype.forEach.call(codes, function (code) {
+            observer.observe(code.closest("pre") || code);
+        });
+    }
+
+    document.addEventListener("ct-theme-changed", function () {
+        if (state === "loaded") render();
+    });
+
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", init);
+    } else {
+        init();
+    }
 })();
 </script>

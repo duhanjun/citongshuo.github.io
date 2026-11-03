@@ -9,13 +9,15 @@
     {% include nav.html %}
     {% include search.html %}
 
+    <main id="main-content">
     {{ content }}
+    </main>
 
     {% include footer.html %}
 
 
 <!-- Image to hack wechat -->
-<img src="/img/icon_wechat.png" width="0" height="0" />
+<img src="/img/icon_wechat.png" width="0" height="0" alt="" aria-hidden="true" />
 <!-- Migrate from head to bottom, no longer block render and still work -->
 
 </body>
