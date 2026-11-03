@@ -1,0 +1,59 @@
+name: Build
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.3.8"
+          bundler-cache: true
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - name: Install Node dependencies
+        run: npm ci
+
+      - name: Build Jekyll
+        env:
+          JEKYLL_ENV: production
+        run: bundle exec jekyll build
+
+      - name: Build Pagefind index
+        run: npx --no-install pagefind --site _site
+
+      - name: Assert build output
+        run: |
+          test -f _site/index.html
+          test -f _site/sitemap.xml
+          test -f _site/pagefind/pagefind-entry.json
+          test ! -e _site/2026-11-03
+          test ! -e _site/esa.jsonc
+          node -e "const fs=require('fs');const count=fs.readdirSync('_posts').filter(f=>f.endsWith('.md')).length;const e=require('./_site/pagefind/pagefind-entry.json');const pages=e.languages['zh-cn']&&e.languages['zh-cn'].page_count;if(pages!==count){console.error('page_count',pages,'posts',count);process.exit(1)}"
+
+      - name: Upload site artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: site
+          path: _site
+          retention-days: 7

@@ -69,7 +69,9 @@ jekyll-minifier:
     - "<textarea\\b[^>]*>[\\s\\S]*?</textarea>"
   # 行内与独立的 CSS/JS/JSON 压缩（JS 走 Terser，支持 ES6+）
   compress_css: true
-  compress_javascript: true
+  # 逐页 Terser 在 Windows/ExecJS 下会把 10 篇文章的构建拖到 40–60s，
+  # 而 Brotli 后每页只省约 0.9KB；这里关闭 JS 压缩，交由构建/边缘压缩处理。
+  compress_javascript: false
   compress_json: true
   # Service Worker 单独排除：它不参与站点渲染，且改写过压缩产物风险高
   exclude:

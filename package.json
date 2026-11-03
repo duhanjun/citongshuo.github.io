@@ -1,0 +1,15 @@
+{
+  "name": "citongshuo-site",
+  "version": "0.0.0",
+  "private": true,
+  "description": "刺桐说静态站点构建辅助工具",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "search": "pagefind --site _site"
+  },
+  "devDependencies": {
+    "pagefind": "1.5.2"
+  }
+}
