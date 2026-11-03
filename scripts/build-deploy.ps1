@@ -120,8 +120,11 @@ $entryPath = "_site/pagefind/pagefind-entry.json"
 if (-not (Test-Path $entryPath)) {
     Fail "Pagefind 未生成 pagefind-entry.json。"
 }
-$entry = (Get-Content $entryPath -Raw | ConvertFrom-Json)
-$expectedPagefind = (Get-Content "package.json" -Raw | ConvertFrom-Json).devDependencies.pagefind
+# Windows PowerShell 5.1 的 Get-Content 默认按 ANSI 读取，会把 UTF-8 的
+# include_characters/中文 description 读成乱码；这里显式用 .NET UTF-8 读取。
+$entry = ([IO.File]::ReadAllText((Join-Path $repoRoot $entryPath)) | ConvertFrom-Json)
+$packageJson = ([IO.File]::ReadAllText((Join-Path $repoRoot "package.json")) | ConvertFrom-Json)
+$expectedPagefind = $packageJson.devDependencies.pagefind
 if ($entry.version -ne $expectedPagefind) {
     Fail "Pagefind 实际版本 $($entry.version) 与 package.json 固定的 $expectedPagefind 不一致。"
 }
