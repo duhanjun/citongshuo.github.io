@@ -452,6 +452,18 @@ html[data-theme="dark"] select {
   background: rgba(255, 255, 255, 0.2);
 }
 
+/* 键盘聚焦时按钮默认 opacity:0 会"隐形"，故聚焦即显示并给出可见轮廓 */
+.post-container .highlight:focus-within .ct-copy-btn,
+.post-container > pre:focus-within .ct-copy-btn,
+.ct-copy-btn:focus {
+  opacity: 1;
+}
+
+.ct-copy-btn:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
 /* ============================ 标签聚合页 ============================ */
 .ct-more-tags {
   margin: 10px 0 0;
