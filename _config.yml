@@ -31,6 +31,18 @@ permalink: pretty
 paginate: 10
 # 界面文案语言（对应 _data/ui-text.yml 下的 key）
 ui_lang: zh
+# 页面 front matter 默认值：页面标题集中在此维护（页面 front matter 不支持 Liquid 渲染）
+defaults:
+  - scope:
+      path: "archive.html"
+      type: pages
+    values:
+      title: Archive
+  - scope:
+      path: "offline.html"
+      type: pages
+    values:
+      title: Offline
 exclude:
   [
     "node_modules",

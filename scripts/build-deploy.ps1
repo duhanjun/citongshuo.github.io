@@ -135,6 +135,13 @@ if ($indexedPages -ne $postCount) {
 }
 Write-Host "  Pagefind $($entry.version) 已索引 $indexedPages 页。" -ForegroundColor DarkGray
 
+# 本站只按需加载 pagefind-ui.js / pagefind-ui.css（其内部仅 import pagefind.js），
+# Pagefind 一并生成的 component-ui / modular-ui / highlight 资产无人引用，删掉约 279KB。
+node scripts/prune-pagefind-assets.mjs "_site/pagefind"
+if ($LASTEXITCODE -ne 0) {
+    Fail "Pagefind 冗余资产裁剪失败，已中止。"
+}
+
 Write-Host "[3/6] 提交并推送源码到 main（不含产物）..." -ForegroundColor Cyan
 # 只暂存明确的源码/内容路径，避免 git add -A 把审计、临时文件或凭据带进提交。
 git add -u

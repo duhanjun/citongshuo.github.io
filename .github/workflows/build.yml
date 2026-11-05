@@ -45,6 +45,9 @@ jobs:
           node scripts/segment-cjk-for-pagefind.mjs _site .jekyll-cache/pagefind-src
           npx --no-install pagefind --site .jekyll-cache/pagefind-src --output-path _site/pagefind
 
+      - name: Prune unused Pagefind assets
+        run: node scripts/prune-pagefind-assets.mjs _site/pagefind
+
       - name: Assert build output
         run: |
           test -f _site/index.html

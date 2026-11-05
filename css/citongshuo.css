@@ -452,6 +452,18 @@ html[data-theme="dark"] select {
   background: rgba(255, 255, 255, 0.2);
 }
 
+/* 键盘聚焦时按钮默认 opacity:0 会"隐形"，故聚焦即显示并给出可见轮廓 */
+.post-container .highlight:focus-within .ct-copy-btn,
+.post-container > pre:focus-within .ct-copy-btn,
+.ct-copy-btn:focus {
+  opacity: 1;
+}
+
+.ct-copy-btn:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
 /* ============================ 标签聚合页 ============================ */
 .ct-more-tags {
   margin: 10px 0 0;
@@ -715,4 +727,50 @@ html[data-theme="dark"] .post-container .pager li > a > span {
   margin: 0.6em 0 0.2em;
   color: var(--ct-text-muted);
   font-size: 14px;
+}
+
+/* hux-blog.css 第 13 行 #bfbfbf（1.83:1）与第 709 行 gray（3.94:1）均未达 AA，
+   统一提到 #6b6b6b（白底 5.33:1）；深色模式沿用已有 muted 变量 */
+.sidebar-container,
+blockquote {
+  color: #6b6b6b;
+}
+
+.sidebar-container a {
+  color: #6b6b6b !important;
+}
+
+html[data-theme="dark"] .sidebar-container {
+  color: var(--ct-text-muted);
+}
+
+html[data-theme="dark"] .sidebar-container a {
+  color: var(--ct-text-muted) !important;
+}
+
+/* 侧边目录标题由 h5（跳级）改为 h4，字号与间距保持与改动前的 h5 一致 */
+.sidebar-container .ct-catalog-heading {
+  font-size: 14px;
+  padding-bottom: 1em;
+}
+
+/* 无障碍：跳过导航直达正文，仅键盘聚焦时出现在左上角 */
+.ct-skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 1000;
+  padding: 8px 16px;
+  background: #fff;
+  color: #333;
+  border-radius: 0 0 4px 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  font-size: 14px;
+  text-decoration: none;
+}
+
+.ct-skip-link:focus {
+  left: 0;
+  outline: 2px solid var(--ct-accent);
+  outline-offset: 1px;
 }
