@@ -29,17 +29,17 @@ tags:
 
 应用宝正在积极构建AI应用生态，为“刺桐说Pro”提供了良好的发展环境。应用宝电脑版已上线AI分发专区，首批汇集了200多款AI头部应用。数据显示，全球60%的AI产品选择在PC端发布，应用宝的跨端生态让“刺桐说Pro”能够同时满足用户不同场景下的AI助手需求。
 
-![/img/citongshuo-pro-tencent-ai-zone-2.png)
-![/img/citongshuo-pro-tencent-ai-zone-10.png)
-![/img/citongshuo-pro-tencent-ai-zone-11.png)
-![/img/citongshuo-pro-tencent-ai-zone-12.png)
+![](/img/citongshuo-pro-tencent-ai-zone-2.png)
+![](/img/citongshuo-pro-tencent-ai-zone-10.png)
+![](/img/citongshuo-pro-tencent-ai-zone-11.png)
+![](/img/citongshuo-pro-tencent-ai-zone-12.png)
 
 ## 二、刺桐说Pro产品简介
 
 ### 产品定位与运作模式
 
 刺桐说Pro是一个模拟真实投资机构运作模式的多智能体交易系统。
-![/img/citongshuo-pro-tencent-ai-zone-13.png)
+![](/img/citongshuo-pro-tencent-ai-zone-13.png)
 
 ### 四支专业团队协同
 
@@ -57,23 +57,23 @@ tags:
 
 ## 三、刺桐说Pro功能展示
 
-![/img/citongshuo-pro-tencent-ai-zone-14.png)
-![/img/citongshuo-pro-tencent-ai-zone-15.png)
+![](/img/citongshuo-pro-tencent-ai-zone-14.png)
+![](/img/citongshuo-pro-tencent-ai-zone-15.png)
 
 ### 报告与决策的生成链路
 
 用户在应用宝电脑版发送股票名称后，“刺桐说Pro”的分析师团队将提供《情绪分析报告》、《新闻分析报告》、《基本面分析报告》及《技术分析报告》。投资研究团队收到分析报告后将制定《投资计划》，交易团队收到投资计划后将制定《交易决策》，风险管理团队收到交易决策后制定《最终交易决策》。具体功能详见下列示例：
 
-![/img/citongshuo-pro-tencent-ai-zone-16.png)
-![/img/citongshuo-pro-tencent-ai-zone-17.png)
-![/img/citongshuo-pro-tencent-ai-zone-3.png)
-![/img/citongshuo-pro-tencent-ai-zone-4.png)
-![/img/citongshuo-pro-tencent-ai-zone-5.png)
-![/img/citongshuo-pro-tencent-ai-zone-6.png)
-![/img/citongshuo-pro-tencent-ai-zone-7.png)
+![](/img/citongshuo-pro-tencent-ai-zone-16.png)
+![](/img/citongshuo-pro-tencent-ai-zone-17.png)
+![](/img/citongshuo-pro-tencent-ai-zone-3.png)
+![](/img/citongshuo-pro-tencent-ai-zone-4.png)
+![](/img/citongshuo-pro-tencent-ai-zone-5.png)
+![](/img/citongshuo-pro-tencent-ai-zone-6.png)
+![](/img/citongshuo-pro-tencent-ai-zone-7.png)
 
 欢迎扫码体验刺桐说Pro
 
-![/img/citongshuo-pro-tencent-ai-zone-8.jpeg)
+![](/img/citongshuo-pro-tencent-ai-zone-8.jpeg)
 
 免责声明：本文仅为市场分析，基于公开信息整理，不构成任何投资建议。作者未持有证券投资咨询资格，相关内容仅供参考。投资有风险，入市需谨慎！
