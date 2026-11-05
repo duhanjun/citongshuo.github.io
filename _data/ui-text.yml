@@ -14,6 +14,9 @@ zh:
   view_all_tags: "查看全部标签"
   post_count_unit: "篇"
   archive_show_all: "全部"
+  nav_toggle: "Toggle navigation"
+  no_results: "No results"
+  about_community: "社群文化"
   share:
     label: "分享到"
     wechat: "微信"
