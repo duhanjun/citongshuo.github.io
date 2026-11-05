@@ -6,10 +6,12 @@
 <!-- hack iOS CSS :active style -->
 <body ontouchstart="">
 
+    <a class="ct-skip-link" href="#main-content">跳到主要内容</a>
+
     {% include nav.html %}
     {% include search.html %}
 
-    <main id="main-content">
+    <main id="main-content" tabindex="-1">
     {{ content }}
     </main>
 

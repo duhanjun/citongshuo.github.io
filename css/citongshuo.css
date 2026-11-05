@@ -716,3 +716,24 @@ html[data-theme="dark"] .post-container .pager li > a > span {
   color: var(--ct-text-muted);
   font-size: 14px;
 }
+
+/* 无障碍：跳过导航直达正文，仅键盘聚焦时出现在左上角 */
+.ct-skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 1000;
+  padding: 8px 16px;
+  background: #fff;
+  color: #333;
+  border-radius: 0 0 4px 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  font-size: 14px;
+  text-decoration: none;
+}
+
+.ct-skip-link:focus {
+  left: 0;
+  outline: 2px solid var(--ct-accent);
+  outline-offset: 1px;
+}
