@@ -131,17 +131,28 @@
     var box = document.getElementById("ct-lightbox");
     if (!box) return;
     var img = box.querySelector("img");
+    var lastTrigger = null;
     var close = function () {
       box.classList.remove("show");
       if (img) img.removeAttribute("src");
+      if (lastTrigger && lastTrigger.focus) lastTrigger.focus();
+      lastTrigger = null;
     };
     document.addEventListener("click", function (e) {
       var target = e.target;
       if (target && target.tagName === "IMG" && target.closest(".post-container")) {
         e.preventDefault();
         e.stopPropagation();
-        if (img) img.src = target.currentSrc || target.src;
+        lastTrigger = target;
+        if (!target.hasAttribute("tabindex")) {
+          target.setAttribute("tabindex", "-1");
+        }
+        if (img) {
+          img.src = target.currentSrc || target.src;
+          img.setAttribute("tabindex", "-1");
+        }
         box.classList.add("show");
+        if (img) img.focus();
       }
     });
     box.addEventListener("click", close);
