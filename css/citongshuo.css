@@ -729,6 +729,31 @@ html[data-theme="dark"] .post-container .pager li > a > span {
   font-size: 14px;
 }
 
+/* hux-blog.css 第 13 行 #bfbfbf（1.83:1）与第 709 行 gray（3.94:1）均未达 AA，
+   统一提到 #6b6b6b（白底 5.33:1）；深色模式沿用已有 muted 变量 */
+.sidebar-container,
+blockquote {
+  color: #6b6b6b;
+}
+
+.sidebar-container a {
+  color: #6b6b6b !important;
+}
+
+html[data-theme="dark"] .sidebar-container {
+  color: var(--ct-text-muted);
+}
+
+html[data-theme="dark"] .sidebar-container a {
+  color: var(--ct-text-muted) !important;
+}
+
+/* 侧边目录标题由 h5（跳级）改为 h4，字号与间距保持与改动前的 h5 一致 */
+.sidebar-container .ct-catalog-heading {
+  font-size: 14px;
+  padding-bottom: 1em;
+}
+
 /* 无障碍：跳过导航直达正文，仅键盘聚焦时出现在左上角 */
 .ct-skip-link {
   position: absolute;
