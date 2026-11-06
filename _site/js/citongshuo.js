@@ -15,7 +15,7 @@
   }
 
   function updateToggle(pref, resolved) {
-    var btn = document.querySelector(".theme-toggle a");
+    var btn = document.querySelector(".theme-toggle button");
     if (!btn) return;
     var icon = btn.querySelector("i");
     var map = {
@@ -48,7 +48,7 @@
     } catch (e) {}
     applyTheme(pref || "system");
 
-    var btn = document.querySelector(".theme-toggle a");
+    var btn = document.querySelector(".theme-toggle button");
     if (btn) {
       btn.addEventListener("click", function (e) {
         e.preventDefault();
@@ -131,17 +131,28 @@
     var box = document.getElementById("ct-lightbox");
     if (!box) return;
     var img = box.querySelector("img");
+    var lastTrigger = null;
     var close = function () {
       box.classList.remove("show");
       if (img) img.removeAttribute("src");
+      if (lastTrigger && lastTrigger.focus) lastTrigger.focus();
+      lastTrigger = null;
     };
     document.addEventListener("click", function (e) {
       var target = e.target;
       if (target && target.tagName === "IMG" && target.closest(".post-container")) {
         e.preventDefault();
         e.stopPropagation();
-        if (img) img.src = target.currentSrc || target.src;
+        lastTrigger = target;
+        if (!target.hasAttribute("tabindex")) {
+          target.setAttribute("tabindex", "-1");
+        }
+        if (img) {
+          img.src = target.currentSrc || target.src;
+          img.setAttribute("tabindex", "-1");
+        }
         box.classList.add("show");
+        if (img) img.focus();
       }
     });
     box.addEventListener("click", close);
