@@ -12,7 +12,7 @@
 const CACHE_NAMESPACE = 'main-'
 // 每次构建生成新的版本号：发布后旧 cache 在 activate 阶段被删除，
 // 避免 CacheStorage 里的旧 CSS/JS 在新 HTML 下继续被 SWR 优先返回。
-const CACHE_VERSION = '20261113220312';
+const CACHE_VERSION = '20261113222404';
 const CACHE = CACHE_NAMESPACE + 'precache-then-runtime-' + CACHE_VERSION;
 const PRECACHE_LIST = [
   "./",
