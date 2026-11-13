@@ -669,10 +669,35 @@ html[data-theme="dark"] .post-container .ct-callout-danger {
   font-family: inherit;
 }
 
+/* 搜索按钮与导航链接保持同样的行高与内边距，避免图标悬空、贴边 */
 .search-icon .ct-search-trigger {
+  display: block;
+  width: 100%;
+  padding: 10px 15px;
   color: #311e3e;
-  font-size: 30px;
+  font-size: 16px;
+  line-height: 28px;
+  text-align: left;
   transition: all 0.25s;
+}
+
+.search-icon .ct-search-trigger i {
+  font-size: 16px;
+  line-height: 1;
+  vertical-align: middle;
+}
+
+@media only screen and (min-width: 768px) {
+  .search-icon .ct-search-trigger {
+    width: auto;
+    padding: 20px;
+    font-size: 18px;
+    line-height: 20px;
+  }
+
+  .search-icon .ct-search-trigger i {
+    font-size: 18px;
+  }
 }
 
 .search-icon .ct-search-trigger:hover {
